@@ -1,0 +1,4 @@
+nose
+selenium
+unittest2
+
