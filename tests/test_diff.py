@@ -1,27 +1,9 @@
 import math
 from needle.diff import ImageDiff
-from PIL import Image, ImageDraw
 import unittest2
+from . import ImageTestCaseMixin
 
-class TestImageDiff(unittest2.TestCase):
-    def get_image(self, colour):
-        return Image.new('RGB', (100, 100), colour)
-
-    def get_black_image(self):
-        return self.get_image((0, 0, 0))
-
-    def get_white_image(self):
-        return self.get_image((255, 255, 255))
-
-    def get_half_filled_image(self):
-        im = self.get_black_image()
-        draw = ImageDraw.Draw(im)
-        draw.rectangle(
-            ((0, 0), (49, 100)),
-            fill=(255, 255, 255)
-        )
-        return im
-
+class TestImageDiff(ImageTestCaseMixin, unittest2.TestCase):
     def test_nrmsd_all_channels(self):
         diff = ImageDiff(self.get_white_image(), self.get_black_image())
         self.assertEqual(diff.get_nrmsd(), 1)

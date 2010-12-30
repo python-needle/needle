@@ -1,4 +1,6 @@
+from needle.diff import ImageDiff
 from needle.driver import NeedleWebDriver
+from PIL import Image
 import unittest2
 
 class NeedleTestCase(unittest2.TestCase):
@@ -21,5 +23,12 @@ class NeedleTestCase(unittest2.TestCase):
             self.driver_version,
             self.driver_javascript_enabled,
         )
+
+    def assertElementEqualsImage(self, element, fh, threshold=0):
+        image = Image.open(fh)
+        diff = ImageDiff(element.get_screenshot(), image)
+        self.assertAlmostEqual(diff.get_distance(), 0, delta=threshold)
+
+
     
 
