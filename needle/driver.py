@@ -43,7 +43,7 @@ class NeedleWebElement(WebElement):
 
 
 class NeedleWebDriver(WebDriver):
-    def get_html(self, html):
+    def load_html(self, html):
         """
         Load a page in the browser with the given HTML.
         """
@@ -51,9 +51,10 @@ class NeedleWebDriver(WebDriver):
 
     def get_screenshot_as_image(self):
         """
-        Returns a screenshot of the current page as a PIL image.
+        Returns a screenshot of the current page as an RGB PIL image.
         """
-        return Image.open(StringIO(base64.b64decode(self.get_screenshot_as_base64())))
+        fh = StringIO(base64.b64decode(self.get_screenshot_as_base64()))
+        return Image.open(fh).convert('RGB')
     
     def create_web_element(self, *args, **kwargs):
         return NeedleWebElement(self, *args, **kwargs)

@@ -5,7 +5,7 @@ from . import ImageTestCaseMixin
 
 class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
     def create_div(self):
-        self.driver.get_html('<div id="test" style="position: absolute; left: 50px; top: 100px; width: 100px; height: 100px; background-color: black"></div>')
+        self.driver.load_html('<div id="test" style="position: absolute; left: 50px; top: 100px; width: 100px; height: 100px; background-color: black"></div>')
 
     def test_assertAlmostEqual(self):
         self.create_div()
@@ -18,7 +18,7 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
         self.create_div()
         im = self.get_black_image()
         # Create one red pixel
-        im.putpixel((0, 0), (255, 0, 0, 255))
+        im.putpixel((0, 0), (255, 0, 0))
         with self.assertRaises(AssertionError):
             # Default threshold for error is 0
             self.assertElementEqualsImage(
@@ -30,7 +30,7 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
         self.create_div()
         im = self.get_black_image()
         # Create one red pixel
-        im.putpixel((0, 0), (255, 0, 0, 255))
+        im.putpixel((0, 0), (255, 0, 0))
         self.assertElementEqualsImage(
             self.driver.find_element_by_id('test'), 
             self.save_image_to_fh(im),
@@ -41,12 +41,13 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
         self.create_div()
         im = self.get_black_image()
         # Create two white pixels
-        im.putpixel((0, 0), (255, 255, 255, 255))
-        im.putpixel((1, 0), (255, 255, 255, 255))
+        im.putpixel((0, 0), (255, 255, 255))
+        im.putpixel((1, 0), (255, 255, 255))
         with self.assertRaises(AssertionError):
             self.assertElementEqualsImage(
                 self.driver.find_element_by_id('test'), 
                 self.save_image_to_fh(im),
                 threshold=1
             )
+
 
