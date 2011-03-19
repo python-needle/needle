@@ -5,7 +5,19 @@ from . import ImageTestCaseMixin
 
 class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
     def create_div(self):
-        self.driver.load_html('<div id="test" style="position: absolute; left: 50px; top: 100px; width: 100px; height: 100px; background-color: black"></div>')
+        self.driver.load_html("""
+            <style type="text/css">
+                #test {
+                    position: absolute;
+                    left: 50px;
+                    top: 100px;
+                    width: 100px;
+                    height: 100px;
+                    background-color: black;
+                }
+            </style>
+            <div id="test"></div>
+        """)
 
     def test_assertAlmostEqual(self):
         self.create_div()
