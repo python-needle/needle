@@ -99,14 +99,20 @@ def find_package_data(
     return out
 
 setup(
-    name=needle,
-    version=needle.__version__,
+    name='needle',
+    version='0.1-dev',
     description='Automated testing for your CSS.',
-    author=needle.__author__,
-    author_email=needle.__contact__,
-    url=needle.__homepage__,
+    author='Ben Firshman',
+    author_email='ben@firshman.co.uk',
+    url='https://github.com/bfirsh/needle',
     packages=find_packages(exclude=['scripts', 'tests']),
     package_data=find_package_data(exclude_directories=['tests']),
     test_suite='nose.collector',
+    entry_points = {
+        'nose.plugins.0.10': [
+            'needle-capture = needle.plugin:NeedleCapturePlugin'
+        ]
+    },
+    
 )
 
