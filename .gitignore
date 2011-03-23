@@ -7,4 +7,5 @@
 *.swn
 /build/
 /dist/
+selenium-server-standalone-*.jar
 
