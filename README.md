@@ -25,7 +25,7 @@ This example checks for regressions in the appearance of the BBC's masthead.
 Documentation
 -------------
 
-Full documentation is on [Read the Docs](http://readthedocs.org/docs/needle/).
+Full documentation is on [Read the Docs](http://needle.readthedocs.org/).
 
 
 Running Needle's test suite
