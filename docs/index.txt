@@ -51,8 +51,8 @@ To create an initial screenshot of the logo, we need to run Needle in capture mo
 
 This will create ``google-logo.png``. Open it up and check it looks okay.
 
-Now if we run our tests, it will capture the same screenshot and check it against
-this screenshot on disk::
+Now if we run our tests, it will take the same screenshot and check it against
+the screenshot on disk::
 
     $ nosetests test_google.py
 
