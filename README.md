@@ -59,4 +59,20 @@ this screenshot on disk:
 If they are significantly different, the test will fail.
 
 
+Advanced example
+----------------
+
+Needle adds a few useful methods to Selenium's WebElement object. For example,
+we can check computed CSS values:
+
+    from needle.cases import NeedleTestCase
+
+    class GoogleTest(NeedleTestCase):
+        def test_footer(self):
+            self.driver.get('http://www.google.com')
+            e = self.driver.find_element_by_id('fctr')
+            self.assertScreenshot(e, 'google-footer')
+            self.assertEqual(e.get_computed_property('font-size'), '13px')
+
+
 
