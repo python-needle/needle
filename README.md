@@ -11,16 +11,16 @@ tools for testing calculated CSS values and the position of HTML elements.
 Example
 -------
 
-This is an example of a test case which will check for regressions in Google's
-logo:
+This is what Needle test cases look like:
 
     from needle.cases import NeedleTestCase
 
-    class GoogleTest(NeedleTestCase):
-        def test_logo(self):
-            self.driver.get('http://www.google.com')
-            self.assertScreenshot('//*[@id="lga"]', 'google-logo')
+    class BBCNewsTest(NeedleTestCase):
+        def test_masthead(self):
+            self.driver.get('http://www.bbc.co.uk/news/')
+            self.assertScreenshot('//*[@id="blq-mast"]', 'bbc-masthead')
 
+This example checks for regressions in the appearance of the BBC's masthead.
 
 Documentation
 -------------
