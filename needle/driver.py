@@ -10,6 +10,12 @@ except ImportError:
     from StringIO import StringIO
 
 class NeedleWebElement(WebElement):
+    """
+    An element on a page that Selenium has opened.
+
+    It is a Selenium :py:class:`~selenium.webdriver.remote.webelement.WebElement` 
+    object with some extra methods for testing CSS.
+    """
     def get_dimensions(self):
         """
         Returns a dictionary containing, in pixels, the element's ``width`` and
@@ -53,22 +59,33 @@ class NeedleWebElement(WebElement):
     
 
 class NeedleWebDriver(WebDriver):
+    """
+    A browser window that Selenium has opened.
+    
+    It is a Selenium :py:class:`~selenium.webdriver.remote.webdriver.WebDriver` 
+    object with some extra methods for testing CSS. See 
+    `Selenium's documentation <http://seleniumhq.org/docs/03_webdriver.html>`_
+    for more information.
+    """
     def load_html(self, html):
         """
-        Load a page in the browser with the given HTML.
+        Similar to :py:meth:`get`, but instead of passing a URL to load in the 
+        browser, the HTML for the page is provided.
         """
         self.get('data:text/html,'+urllib.quote(html))
 
     def get_screenshot_as_image(self):
         """
-        Returns a screenshot of the current page as an RGB PIL image.
+        Returns a screenshot of the current page as an RGB 
+        `PIL image <http://www.pythonware.com/library/pil/handbook/image.htm>`_.
         """
         fh = StringIO(base64.b64decode(self.get_screenshot_as_base64()))
         return Image.open(fh).convert('RGB')
     
     def load_jquery(self):
         """
-        Loads jQuery on the current page.
+        Loads jQuery 1.5 onto the current page so calls to 
+        :py:meth:`execute_script` have access to it.
         """
         # Bug in 1.5.1 means we can't load on data URL pages.
         # Should be fixed in 1.5.2

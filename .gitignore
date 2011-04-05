@@ -9,4 +9,5 @@
 /build/
 /dist/
 selenium-server-standalone-*.jar
+/docs/_build
 

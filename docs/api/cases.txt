@@ -1,0 +1,15 @@
+Test cases
+==========
+
+.. contents::
+    :local:
+.. currentmodule:: needle.cases
+
+.. autoclass:: needle.cases.NeedleTestCase()
+    :no-undoc-members:
+    
+    .. autoattribute:: driver
+
+    .. automethod:: assertScreenshot(element, name, threshold=0.1)
+
+
