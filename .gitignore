@@ -2,9 +2,10 @@
 *.egg-info
 .DS_Store
 *~
-*.swo
-*.swp
-*.swn
+.*.swo
+.*.swp
+.*.swn
+.*.swm
 /build/
 /dist/
 selenium-server-standalone-*.jar
