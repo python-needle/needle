@@ -1,4 +1,4 @@
-nose
-selenium
+nose>=1.0.0
+selenium==2.0b3
 unittest2
 
