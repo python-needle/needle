@@ -33,9 +33,13 @@ class NeedleTestCase(unittest2.TestCase):
         """
         Assert that a screenshot of an element is the same as a screenshot on disk,
         within a given threshold.
+        
+        The element can either be an xpath as a string or a WebElement object.
 
         A name is required for the screenshot, which will be appended with ``.png``.
         """
+        if isinstance(element, basestring):
+            element = self.driver.find_element_by_xpath(element)
         if isinstance(name, basestring):
             filename = os.path.join(
                 os.path.dirname(_object_filename(self)),
