@@ -12,7 +12,7 @@ Example
 -------
 
 This is an example of a test case which will check for regressions in Google's
-logo::
+logo:
 
     from needle.cases import NeedleTestCase
 
