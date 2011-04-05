@@ -8,13 +8,13 @@ class TestWebDriver(NeedleTestCase):
 
     def test_load_html_works_with_large_pages(self):
         div = '<div>' + 'a' * 1000 + '</div>'
-        html = ''.join(div for _ in range(1000)) + '<div id="test">hello</div>'
+        html = ''.join(div for _ in range(500)) + '<div id="test">hello</div>'
         self.driver.load_html(html)
         self.assertEqual(
             self.driver.execute_script(
                 'return document.getElementsByTagName("div").length'
             ), 
-            1001
+            501
         )
         e = self.driver.find_element_by_id('test')
         self.assertEqual(e.text, 'hello')
