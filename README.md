@@ -1,4 +1,4 @@
-needle
+Needle
 ======
 
 Needle is a tool for testing your CSS with [Selenium](http://seleniumhq.org/) 
@@ -28,8 +28,8 @@ Documentation
 Full documentation is on [Read the Docs](http://readthedocs.org/docs/needle/).
 
 
-Running tests
--------------
+Running Needle's test suite
+---------------------------
 
     $ nosetests
 
