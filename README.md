@@ -25,6 +25,6 @@ logo::
 Documentation
 -------------
 
-
+Full documentation is on [Read the Docs](http://readthedocs.org/docs/needle/).
 
 
