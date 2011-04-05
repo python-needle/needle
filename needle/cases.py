@@ -9,11 +9,11 @@ def _object_filename(obj):
     return os.path.abspath(sys.modules[type(obj).__module__].__file__)
 
 class NeedleTestCase(unittest2.TestCase):
-    driver_url = 'http://127.0.0.1:4444/wd/hub'
-    driver_browser = 'firefox'
-    driver_platform = None
-    driver_version = ''
-    driver_javascript_enabled = True
+    driver_command_executor = 'http://127.0.0.1:4444/wd/hub'
+    driver_desired_capabilities = {
+        'browserName': 'firefox',
+    }
+    driver_browser_profile = None
 
     capture = False
 
@@ -24,24 +24,27 @@ class NeedleTestCase(unittest2.TestCase):
     
     def get_web_driver(self):
         return NeedleWebDriver(
-            self.driver_url,
-            self.driver_browser,
-            self.driver_platform,
-            self.driver_version,
-            self.driver_javascript_enabled,
+            self.driver_command_executor,
+            self.driver_desired_capabilities,
+            self.driver_browser_profile
         )
 
-    def assertElementEqualsImage(self, element, name, threshold=0.1):
+    def assertScreenshot(self, element, name, threshold=0.1):
         """
         Assert that a screenshot of an element is the same as a screenshot on disk,
         within a given threshold.
 
         A name is required for the screenshot, which will be appended with ``.png``.
         """
-        filename = os.path.join(
-            os.path.dirname(_object_filename(self)),
-            '%s.png' % name
-        )
+        if isinstance(name, basestring):
+            filename = os.path.join(
+                os.path.dirname(_object_filename(self)),
+                '%s.png' % name
+            )
+        else:
+            # names can be filehandles for testing. This sucks - we
+            # should write out files to their correct location
+            filename = name
         if self.capture:
             if os.path.exists(filename):
                 self.skipTest('Not capturing %s, image already exists. If you '

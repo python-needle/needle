@@ -7,7 +7,7 @@ import unittest2
 class BasePluginTest(PluginTester, unittest2.TestCase):
     activate = '--with-needle-capture'
     plugins = [NeedleCapturePlugin()]
-    suitepath = 'tests/plugin_test_cases/test_red_box.py'
+    suitepath = 'tests/plugin_test_cases/red_box.py'
 
     def tearDown(self):
         os.remove('tests/plugin_test_cases/test.png')

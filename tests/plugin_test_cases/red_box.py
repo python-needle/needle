@@ -16,5 +16,5 @@ class RedBoxTestCase(ImageTestCaseMixin, NeedleTestCase):
             </style>
             <div id="test"></div>
         """)
-        self.assertElementEqualsImage(self.driver.find_element_by_id('test'), 'test')
+        self.assertScreenshot(self.driver.find_element_by_id('test'), 'test')
 

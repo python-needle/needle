@@ -4,7 +4,7 @@ class TestWebDriver(NeedleTestCase):
     def test_load_html(self):
         self.driver.load_html('<div id="test">foo</div>')
         e = self.driver.find_element_by_id('test')
-        self.assertEqual(e.get_text(), 'foo')
+        self.assertEqual(e.text, 'foo')
 
     def test_load_html_works_with_large_pages(self):
         div = '<div>' + 'a' * 1000 + '</div>'
@@ -17,7 +17,7 @@ class TestWebDriver(NeedleTestCase):
             1001
         )
         e = self.driver.find_element_by_id('test')
-        self.assertEqual(e.get_text(), 'hello')
+        self.assertEqual(e.text, 'hello')
 
     def test_load_jquery(self):
         self.driver.load_html('<div></div>')

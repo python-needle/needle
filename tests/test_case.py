@@ -19,44 +19,44 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
             <div id="test"></div>
         """)
 
-    def test_assertAlmostEqual(self):
+    def test_assertScreenshot(self):
         self.create_div()
-        self.assertElementEqualsImage(
+        self.assertScreenshot(
             self.driver.find_element_by_id('test'), 
             self.save_image_to_fh(self.get_black_image())
         )
 
-    def test_assertAlmostEqual_fails(self):
+    def test_assertScreenshot_fails(self):
         self.create_div()
         im = self.get_black_image()
         # Create one red pixel
         im.putpixel((0, 0), (255, 0, 0))
         with self.assertRaises(AssertionError):
             # Default threshold for error is 0
-            self.assertElementEqualsImage(
+            self.assertScreenshot(
                 self.driver.find_element_by_id('test'), 
                 self.save_image_to_fh(im)
             )
 
-    def test_assertAlmostEqual_does_not_fail_with_threshold(self):
+    def test_assertScreenshot_does_not_fail_with_threshold(self):
         self.create_div()
         im = self.get_black_image()
         # Create one red pixel
         im.putpixel((0, 0), (255, 0, 0))
-        self.assertElementEqualsImage(
+        self.assertScreenshot(
             self.driver.find_element_by_id('test'), 
             self.save_image_to_fh(im),
             threshold=1
         )
 
-    def test_assertAlmostEqual_fails_with_threshold(self):
+    def test_assertScreenshot_fails_with_threshold(self):
         self.create_div()
         im = self.get_black_image()
         # Create two white pixels
         im.putpixel((0, 0), (255, 255, 255))
         im.putpixel((1, 0), (255, 255, 255))
         with self.assertRaises(AssertionError):
-            self.assertElementEqualsImage(
+            self.assertScreenshot(
                 self.driver.find_element_by_id('test'), 
                 self.save_image_to_fh(im),
                 threshold=1
