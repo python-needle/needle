@@ -47,14 +47,14 @@ XPath to the element we are capturing and a filename for the image.
 
 To create an initial screenshot of the logo, we need to run Needle in capture mode::
 
-    $ nosetests test_google.py --with-needle-capture
+    $ nosetests test_bbc.py --with-needle-capture
 
-This will create ``google-logo.png``. Open it up and check it looks okay.
+This will create ``bbc-masthead.png``. Open it up and check it looks okay.
 
 Now if we run our tests, it will take the same screenshot and check it against
 the screenshot on disk::
 
-    $ nosetests test_google.py
+    $ nosetests test_bbc.py
 
 If a regression in your CSS causes them to become significantly different, the 
 test will fail.
