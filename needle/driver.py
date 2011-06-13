@@ -55,7 +55,7 @@ class NeedleWebElement(WebElement):
         self._parent.load_jquery()
         return self._parent.execute_script("""
             return $(arguments[0]).css(arguments[1]);
-        """, self, prop);
+        """, self, prop)
     
 
 class NeedleWebDriver(WebDriver):
