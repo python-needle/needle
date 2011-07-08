@@ -1,5 +1,5 @@
 nose>=1.0.0
-selenium==2.0rc2
+selenium==2.0.1
 unittest2==0.5.1
 PIL
 
