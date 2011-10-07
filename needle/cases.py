@@ -69,7 +69,13 @@ class NeedleTestCase(unittest2.TestCase):
         else:
             image = Image.open(filename)
             diff = ImageDiff(element.get_screenshot(), image)
-            self.assertAlmostEqual(diff.get_distance(), 0, delta=threshold)
+            distance = abs(diff.get_distance())
+            if distance > threshold:
+                raise AssertionError("The saved screenshot for '%s' did not match "
+                                     "the screenshot captured (by a distance of %.2f)" 
+                                     % (name, distance))
+
+
 
 
     
