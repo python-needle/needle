@@ -21,7 +21,7 @@ As root, or in a `virtualenv <http://www.virtualenv.org/>`_::
     $ python setup.py install
 
 
-Download `selenium-server-standalone-2.0.0.jar <http://selenium.googlecode.com/files/selenium-server-standalone-2.0.0.jar>`_. By default, Selenium requires `Firefox 4 <http://getfirefox.com>`_.
+Download `selenium-server-standalone-2.8.0.jar <http://selenium.googlecode.com/files/selenium-server-standalone-2.8.0.jar>`_. By default, Selenium requires `Firefox 4 <http://getfirefox.com>`_.
 
 
 Getting started
@@ -29,7 +29,7 @@ Getting started
 
 Run the Selenium server::
 
-    $ java -jar selenium-server-standalone-2.0.0.jar
+    $ java -jar selenium-server-standalone-2.8.0.jar
 
 Create ``test_bbc.py`` in an empty directory::
 
