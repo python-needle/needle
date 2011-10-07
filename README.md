@@ -18,7 +18,7 @@ This is what Needle test cases look like:
     class BBCNewsTest(NeedleTestCase):
         def test_masthead(self):
             self.driver.get('http://www.bbc.co.uk/news/')
-            self.assertScreenshot('//*[@id="blq-mast"]', 'bbc-masthead')
+            self.assertScreenshot('#blq-mast', 'bbc-masthead')
 
 This example checks for regressions in the appearance of the BBC's masthead.
 

@@ -42,7 +42,7 @@ class NeedleTestCase(unittest2.TestCase):
         Assert that a screenshot of an element is the same as a screenshot on disk,
         within a given threshold.
         
-        :param element: Either an XPath as a string or a 
+        :param element: Either a CSS selector as a string or a 
                         :py:class:`~needle.driver.NeedleWebElement` object that 
                         represents the element to capture.
         :param name: A name for the screenshot, which will be appended with 
@@ -50,7 +50,7 @@ class NeedleTestCase(unittest2.TestCase):
         :param threshold: The threshold for triggering a test failure.
         """
         if isinstance(element, basestring):
-            element = self.driver.find_element_by_xpath(element)
+            element = self.driver.find_element_by_css_selector(element)
         if isinstance(name, basestring):
             filename = os.path.join(
                 os.path.dirname(_object_filename(self)),

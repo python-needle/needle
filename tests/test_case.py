@@ -26,12 +26,9 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
             self.save_image_to_fh(self.get_black_image())
         )
 
-    def test_assertScreenshot_with_xpath(self):
+    def test_assertScreenshot_with_css_selector(self):
         self.create_div()
-        self.assertScreenshot(
-            '//*[@id="test"]',
-            self.save_image_to_fh(self.get_black_image())
-        )
+        self.assertScreenshot('#test', self.save_image_to_fh(self.get_black_image()))
 
     def test_assertScreenshot_fails(self):
         self.create_div()
