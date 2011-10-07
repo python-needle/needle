@@ -11,7 +11,7 @@ tools for testing calculated CSS values and the position of HTML elements.
 Example
 -------
 
-This is what Needle test cases look like:
+This is what a Needle test case looks like:
 
     from needle.cases import NeedleTestCase
 
