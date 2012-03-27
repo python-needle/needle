@@ -108,6 +108,14 @@ setup(
     packages=find_packages(exclude=['scripts', 'tests']),
     package_data=find_package_data(exclude_directories=['tests']),
     test_suite='nose.collector',
+    install_requires = [
+        
+        'nose>=1.0.0',
+        'selenium==2.8.1',
+        'unittest2==0.5.1',
+        'PIL',
+
+        ],
     entry_points = {
         'nose.plugins.0.10': [
             'needle-capture = needle.plugin:NeedleCapturePlugin'
