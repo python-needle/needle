@@ -1,19 +1,30 @@
+# encoding: utf-8
+from __future__ import absolute_import
+
+import os
+import sys
+
+if sys.version_info > (2, 7):
+    from unittest import TestCase
+else:
+    from unittest2 import TestCase
+
+from PIL import Image
+
 from needle.diff import ImageDiff
 from needle.driver import NeedleWebDriver
-import os
-from PIL import Image
-import sys
-import unittest2
+
 
 def _object_filename(obj):
     return os.path.abspath(sys.modules[type(obj).__module__].__file__)
 
-class NeedleTestCase(unittest2.TestCase):
+
+class NeedleTestCase(TestCase):
     """
     A `unittest2 <http://www.voidspace.org.uk/python/articles/unittest2.shtml>`_
     test case which provides tools for testing CSS with Selenium.
     """
-    #: An instance of :py:class:`~needle.driver.NeedleWebDriver`, created when 
+    #: An instance of :py:class:`~needle.driver.NeedleWebDriver`, created when
     #: each test is run.
     driver = None
 
@@ -41,11 +52,11 @@ class NeedleTestCase(unittest2.TestCase):
         """
         Assert that a screenshot of an element is the same as a screenshot on disk,
         within a given threshold.
-        
-        :param element: Either a CSS selector as a string or a 
-                        :py:class:`~needle.driver.NeedleWebElement` object that 
+
+        :param element: Either a CSS selector as a string or a
+                        :py:class:`~needle.driver.NeedleWebElement` object that
                         represents the element to capture.
-        :param name: A name for the screenshot, which will be appended with 
+        :param name: A name for the screenshot, which will be appended with
                      ``.png``.
         :param threshold: The threshold for triggering a test failure.
         """
@@ -72,11 +83,5 @@ class NeedleTestCase(unittest2.TestCase):
             distance = abs(diff.get_distance())
             if distance > threshold:
                 raise AssertionError("The saved screenshot for '%s' did not match "
-                                     "the screenshot captured (by a distance of %.2f)" 
+                                     "the screenshot captured (by a distance of %.2f)"
                                      % (name, distance))
-
-
-
-
-    
-
