@@ -36,17 +36,21 @@ class NeedleTestCase(TestCase):
 
     capture = False
 
-    def __call__(self, *args, **kwargs):
-        self.driver = self.get_web_driver()
-        super(NeedleTestCase, self).__call__(*args, **kwargs)
-        self.driver.close()
-    
-    def get_web_driver(self):
-        return NeedleWebDriver(
-            self.driver_command_executor,
-            self.driver_desired_capabilities,
-            self.driver_browser_profile
-        )
+    @classmethod
+    def setUpClass(cls):
+        cls.driver = cls.get_web_driver()
+        super(NeedleTestCase, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        super(NeedleTestCase, cls).tearDownClass()
+        cls.driver.quit()
+
+    @classmethod
+    def get_web_driver(cls):
+        return NeedleWebDriver(cls.driver_command_executor,
+                               cls.driver_desired_capabilities,
+                               cls.driver_browser_profile)
 
     def assertScreenshot(self, element, name, threshold=0.1):
         """
