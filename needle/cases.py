@@ -38,6 +38,8 @@ class NeedleTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        if os.environ.get('NEEDLE_CAPTURE'):
+            cls.capture = True
         cls.driver = cls.get_web_driver()
         super(NeedleTestCase, cls).setUpClass()
 
