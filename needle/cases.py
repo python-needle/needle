@@ -30,7 +30,7 @@ class NeedleTestCase(TestCase):
 
     driver_command_executor = 'http://127.0.0.1:4444/wd/hub'
     driver_desired_capabilities = {
-        'browserName': 'firefox',
+        'browserName': os.environ.get('NEEDLE_BROWSER', 'firefox'),
     }
     driver_browser_profile = None
 
