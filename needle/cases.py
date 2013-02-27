@@ -54,6 +54,13 @@ class NeedleTestCase(TestCase):
                                cls.driver_desired_capabilities,
                                cls.driver_browser_profile)
 
+    def __init__(self, *args, **kwargs):
+        super(NeedleTestCase, self).__init__(*args, **kwargs)
+        # TODO: should output directory be timestamped?
+        self.output_directory = os.environ.get('NEEDLE_OUTPUT_DIR', os.path.realpath(os.path.join(os.getcwd(), 'screenshots')))
+        # TODO: Should baseline be a top-level peer to output_directory?
+        self.baseline_directory = os.environ.get('NEEDLE_BASELINE_DIR', os.path.realpath(os.path.join(os.getcwd(), 'screenshots', 'baseline')))
+
     def assertScreenshot(self, element, name, threshold=0.1):
         """
         Assert that a screenshot of an element is the same as a screenshot on disk,
@@ -68,24 +75,29 @@ class NeedleTestCase(TestCase):
         """
         if isinstance(element, basestring):
             element = self.driver.find_element_by_css_selector(element)
-        if isinstance(name, basestring):
-            filename = os.path.join(
-                os.path.dirname(_object_filename(self)),
-                '%s.png' % name
-            )
-        else:
+
+        if not isinstance(name, basestring):
+            raise NotImplementedError  # This needs to be reconciled below without worsening code-smell
             # names can be filehandles for testing. This sucks - we
             # should write out files to their correct location
             filename = name
+
+        baseline_file = os.path.join(self.baseline_directory, '%s.png' % name)
+        output_file = os.path.join(self.output_directory, '%s.png' % name)
+
         if self.capture:
-            if os.path.exists(filename):
+            if os.path.exists(baseline_file):
                 self.skipTest('Not capturing %s, image already exists. If you '
                               'want to capture this element again, delete %s'
-                              % (name, filename))
-            element.get_screenshot().save(filename)
+                              % (name, baseline_file))
+            element.get_screenshot().save(baseline_file)
         else:
-            image = Image.open(filename)
-            diff = ImageDiff(element.get_screenshot(), image)
+            screenshot = element.get_screenshot()
+            screenshot.save(output_file)
+
+            baseline_image = Image.open(baseline_file)
+
+            diff = ImageDiff(screenshot, baseline_image)
             distance = abs(diff.get_distance())
             if distance > threshold:
                 raise AssertionError("The saved screenshot for '%s' did not match "
