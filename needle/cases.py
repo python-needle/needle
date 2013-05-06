@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 from contextlib import contextmanager
 import os
+import subprocess
 import sys
 
 if sys.version_info > (2, 7):
@@ -36,6 +37,9 @@ class NeedleTestCase(TestCase):
     driver_browser_profile = None
 
     capture = False
+
+    # TODO: More robust env handling:
+    use_perceptualdiff = os.environ.get('NEEDLE_USE_PERCEPTUALDIFF', False)
 
     @classmethod
     def setUpClass(cls):
@@ -114,11 +118,22 @@ class NeedleTestCase(TestCase):
             screenshot = element.get_screenshot()
             screenshot.save(output_file)
 
-            baseline_image = Image.open(baseline_file)
+            if self.use_perceptualdiff:
+                diff_filename = output_file.replace(".png", ".diff.ppm")
+                try:
+                    # BUG: figure out how best to convert threshold distances to pixel counts
+                    subprocess.check_call(["perceptualdiff", "-output", diff_filename,
+                                           baseline_file, output_file])
+                except subprocess.CalledProcessError:
+                    raise AssertionError("The saved screenshot for '%s' did not match "
+                                         "the screenshot captured: see %s"
+                                         % (filename, diff_filename))
+            else:
+                baseline_image = Image.open(baseline_file)
 
-            diff = ImageDiff(screenshot, baseline_image)
-            distance = abs(diff.get_distance())
-            if distance > threshold:
-                raise AssertionError("The saved screenshot for '%s' did not match "
-                                     "the screenshot captured (by a distance of %.2f)"
-                                     % (filename, distance))
+                diff = ImageDiff(screenshot, baseline_image)
+                distance = abs(diff.get_distance())
+                if distance > threshold:
+                    raise AssertionError("The saved screenshot for '%s' did not match "
+                                         "the screenshot captured (by a distance of %.2f)"
+                                         % (filename, distance))
