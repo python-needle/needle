@@ -66,6 +66,11 @@ class NeedleTestCase(TestCase):
         # TODO: Should baseline be a top-level peer to output_directory?
         self.baseline_directory = os.environ.get('NEEDLE_BASELINE_DIR', os.path.realpath(os.path.join(os.getcwd(), 'screenshots', 'baseline')))
 
+        for i in (self.baseline_directory, self.output_directory):
+            if not os.path.exists(i):
+                print >>sys.stderr, "Creating %s" % i
+                os.makedirs(i)
+
     def assertScreenshot(self, element_or_selector, filename, threshold=0.1):
         """assert-style variant of compareScreenshot context manager
 
