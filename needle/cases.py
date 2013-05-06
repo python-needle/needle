@@ -38,6 +38,9 @@ class NeedleTestCase(TestCase):
 
     capture = False
 
+    viewport_width = 1024
+    viewport_height = 768
+
     # TODO: More robust env handling:
     use_perceptualdiff = os.environ.get('NEEDLE_USE_PERCEPTUALDIFF', False)
 
@@ -46,6 +49,19 @@ class NeedleTestCase(TestCase):
         if os.environ.get('NEEDLE_CAPTURE'):
             cls.capture = True
         cls.driver = cls.get_web_driver()
+        cls.driver.set_window_position(0, 0)
+
+        cls.driver.set_window_size(cls.viewport_width, cls.viewport_height)
+
+        cls.driver.get('data:text/html,<html><body style="overflow:scroll">measuring viewport size</body>')
+
+        # Measure the difference between the actual document width and the desired viewport width so we can
+        # account for scrollbars:
+        measured = cls.driver.execute_script("return {width: document.body.clientWidth, height: document.body.clientHeight};")
+
+        delta = cls.viewport_width - measured['width']
+        cls.driver.set_window_size(cls.viewport_width + delta, cls.viewport_height)
+
         super(NeedleTestCase, cls).setUpClass()
 
     @classmethod
