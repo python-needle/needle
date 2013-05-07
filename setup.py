@@ -113,6 +113,6 @@ setup(
             'needle-capture = needle.plugin:NeedleCapturePlugin'
         ]
     },
-    
+    install_requires = open('requirements.txt').readlines(),
 )
 
