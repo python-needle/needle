@@ -100,7 +100,7 @@ def find_package_data(
 
 setup(
     name='needle',
-    version='0.1-dev',
+    version='0.0.1',
     description='Automated testing for your CSS.',
     author='Ben Firshman',
     author_email='ben@firshman.co.uk',
