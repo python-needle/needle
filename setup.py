@@ -115,8 +115,8 @@ setup(
     },
     install_requires=[
         'nose>=1.0.0',
-        'selenium==2.8.1',
-        'unittest2==0.5.1',
+        'selenium>=2,<3',
+        'unittest2>=0.5.1',
         'PIL',
     ],
 )
