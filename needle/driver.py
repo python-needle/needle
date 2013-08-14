@@ -65,14 +65,9 @@ class NeedleWebElement(WebElement):
         """, self, prop)
 
 
-class NeedleWebDriver(WebDriver):
+class NeedleWebDriverMixin(object):
     """
-    A browser window that Selenium has opened.
-
-    It is a Selenium :py:class:`~selenium.webdriver.remote.webdriver.WebDriver`
-    object with some extra methods for testing CSS. See
-    `Selenium's documentation <http://seleniumhq.org/docs/03_webdriver.html>`_
-    for more information.
+    Selenium WebDriver mixin with some extra methods for testing CSS.
     """
     def load_html(self, html):
         """
@@ -107,3 +102,13 @@ class NeedleWebDriver(WebDriver):
     def create_web_element(self, *args, **kwargs):
         return NeedleWebElement(self, *args, **kwargs)
 
+
+class NeedleWebDriver(NeedleWebDriverMixin, WebDriver):
+    """
+    A browser window that Selenium has opened.
+
+    It is a Selenium :py:class:`~selenium.webdriver.remote.webdriver.WebDriver`
+    object with some extra methods for testing CSS. See
+    `Selenium's documentation <http://seleniumhq.org/docs/03_webdriver.html>`_
+    for more information.
+    """
