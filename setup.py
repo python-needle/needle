@@ -113,6 +113,11 @@ setup(
             'needle-capture = needle.plugin:NeedleCapturePlugin'
         ]
     },
-    install_requires = open('requirements.txt').readlines(),
+    install_requires=[
+        'nose>=1.0.0',
+        'selenium>=2,<3',
+        'unittest2>=0.5.1',
+        'pillow',
+    ],
 )
 
