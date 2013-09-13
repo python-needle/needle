@@ -89,12 +89,13 @@ class NeedleWebDriverMixin(object):
         Loads jQuery 1.5 onto the current page so calls to
         :py:meth:`execute_script` have access to it.
         """
-        # Bug in 1.5.1 means we can't load on data URL pages.
-        # Should be fixed in 1.5.2
-        # https://github.com/jquery/jquery/pull/269
-        self.execute_script(open(
-            os.path.join(self._get_js_path(), 'jquery-1.5.min.js')
-        ).read() + '\nreturn "";')
+        if (self.execute_script('return typeof(jQuery)') == 'undefined'):
+            # Bug in 1.5.1 means we can't load on data URL pages.
+            # Should be fixed in 1.5.2
+            # https://github.com/jquery/jquery/pull/269
+            self.execute_script(open(
+                os.path.join(self._get_js_path(), 'jquery-1.5.min.js')
+            ).read() + '\nreturn "";')
 
     def _get_js_path(self):
         return os.path.join(os.path.dirname(os.path.abspath(__file__)), 'js')
