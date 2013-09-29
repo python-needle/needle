@@ -50,18 +50,7 @@ class NeedleTestCase(TestCase):
             cls.capture = True
         cls.driver = cls.get_web_driver()
         cls.driver.set_window_position(0, 0)
-
-        cls.driver.set_window_size(cls.viewport_width, cls.viewport_height)
-
-        cls.driver.get('data:text/html,<html><body style="overflow:scroll">measuring viewport size</body>')
-
-        # Measure the difference between the actual document width and the desired viewport width so we can
-        # account for scrollbars:
-        measured = cls.driver.execute_script("return {width: document.body.clientWidth, height: document.body.clientHeight};")
-
-        delta = cls.viewport_width - measured['width']
-        cls.driver.set_window_size(cls.viewport_width + delta, cls.viewport_height)
-
+        cls.set_viewport_size(cls.viewport_width, cls.viewport_height)
         super(NeedleTestCase, cls).setUpClass()
 
     @classmethod
@@ -86,6 +75,17 @@ class NeedleTestCase(TestCase):
             if not os.path.exists(i):
                 print >>sys.stderr, "Creating %s" % i
                 os.makedirs(i)
+
+    @classmethod
+    def set_viewport_size(cls, viewport_width, viewport_height):
+        cls.driver.set_window_size(viewport_width, viewport_height)
+
+        # Measure the difference between the actual document width and the
+        # desired viewport width so we can account for scrollbars:
+        measured = cls.driver.execute_script("return {width: document.body.clientWidth, height: document.body.clientHeight};")
+        delta = viewport_width - measured['width']
+
+        cls.driver.set_window_size(viewport_width + delta, viewport_height)
 
     def assertScreenshot(self, element_or_selector, filename, threshold=0.1):
         """assert-style variant of compareScreenshot context manager
