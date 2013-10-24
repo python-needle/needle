@@ -17,9 +17,7 @@ If you haven't got `pip <http://www.pip-installer.org/>`_ installed::
 
 As root, or in a `virtualenv <http://www.virtualenv.org/>`_::
 
-    $ pip install -r requirements.txt
-    $ python setup.py install
-
+    $ pip install needle
 
 Download `selenium-server-standalone-2.8.0.jar <http://selenium.googlecode.com/files/selenium-server-standalone-2.8.0.jar>`_. By default, Selenium requires `Firefox 4 <http://getfirefox.com>`_.
 
