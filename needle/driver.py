@@ -28,18 +28,16 @@ class NeedleWebElement(WebElement):
         Returns a dictionary containing, in pixels, the element's ``width`` and
         ``height``, and it's ``left`` and ``top`` position relative to the document.
         """
+        self._parent.load_jquery()
         return self._parent.execute_script("""
-            var e = arguments[0];
+            var e = $(arguments[0]);
+            var offset = e.offset();
             var dimensions = {
-                'width': e.offsetWidth,
-                'height': e.offsetHeight,
-                'left': 0,
-                'top': 0
+                'width': e.outerWidth(),
+                'height': e.outerHeight(),
+                'left': Math.floor(offset.left),
+                'top': Math.floor(offset.top)
             };
-            do {
-                dimensions['left'] += e.offsetLeft;
-                dimensions['top'] += e.offsetTop;
-            } while (e = e.offsetParent)
             return dimensions;
         """, self)
 
