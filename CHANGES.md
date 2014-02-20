@@ -7,6 +7,8 @@ Change log
  - Allow needle to be used with custom web driver
  - Replace PIL with pillow
 
+Thanks @treyhunner!
+
 0.0.1 (2013-05-07)
 ------------------
 
