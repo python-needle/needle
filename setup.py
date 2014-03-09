@@ -33,7 +33,8 @@ setup(
     test_suite='nose.collector',
     entry_points = {
         'nose.plugins.0.10': [
-            'needle-capture = needle.plugin:NeedleCapturePlugin'
+            'needle-capture = needle.plugin:NeedleCapturePlugin',
+            'save-baseline = needle.plugin:SaveBaselinePlugin'
         ]
     },
     install_requires=[
