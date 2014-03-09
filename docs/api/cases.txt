@@ -7,9 +7,9 @@ Test cases
 
 .. autoclass:: needle.cases.NeedleTestCase()
     :no-undoc-members:
-    
+
     .. autoattribute:: driver
 
-    .. automethod:: assertScreenshot(element, name, threshold=0.1)
+    .. automethod:: assertScreenshot(element, file, threshold=0.1)
 
 
