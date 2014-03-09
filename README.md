@@ -1,6 +1,8 @@
 Needle
 ======
 
+[![Build Status](https://travis-ci.org/bfirsh/needle.png?branch=master)](https://travis-ci.org/bfirsh/needle)
+
 Needle is a tool for testing your CSS with [Selenium](http://seleniumhq.org/) 
 and [nose](http://somethingaboutorange.com/mrl/projects/nose/).
 
