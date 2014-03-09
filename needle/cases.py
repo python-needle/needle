@@ -87,7 +87,7 @@ class NeedleTestCase(TestCase):
 
         cls.driver.set_window_size(viewport_width + delta, viewport_height)
 
-    def assertScreenshot(self, element_or_selector, filename, threshold=0.1):
+    def assertScreenshot(self, element_or_selector, file, threshold=0.1):
         """assert-style variant of compareScreenshot context manager
 
         compareScreenshot() can be considerably more efficient for recording baselines by avoiding the need
@@ -95,7 +95,7 @@ class NeedleTestCase(TestCase):
         to continue using normal unittest-style assertions if you don't need the efficiency benefits
         """
 
-        with self.compareScreenshot(element_or_selector, filename, threshold=threshold):
+        with self.compareScreenshot(element_or_selector, file, threshold=threshold):
             pass
 
     @contextmanager
