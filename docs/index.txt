@@ -37,11 +37,13 @@ to open BBC News and check the bar across the top of the page looks correct.
 :py:meth:`~needle.cases.NeedleTestCase.assertScreenshot` take two arguments: a
 CSS selector for the element we are capturing and a filename for the image.
 
-To create an initial screenshot of the logo, we need to run Needle in capture mode::
+To create an initial screenshot of the logo, we need to run Needle in
+'baseline saving' mode::
 
-    $ nosetests test_bbc.py --with-needle-capture
+    $ nosetests test_bbc.py --with-save-baseline
 
-This will create ``bbc-masthead.png``. Open it up and check it looks okay.
+This will create ``screenshots/baseline/bbc-masthead.png``. Open it up and
+check it looks okay.
 
 Now if we run our tests, it will take the same screenshot and check it against
 the screenshot on disk::

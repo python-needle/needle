@@ -10,6 +10,12 @@ Change log
   `driver_desired_capabilities` and `driver_browser_profile` attributes.
   To control the logic for selecting the proper web driver, you may simply
   override the `get_web_driver()` method.
+ - The `--with-needle-capture` and `NeedleTestCase.capture` options were
+   deprecated and will be removed in version 0.4.0. Instead, you should now
+   respectively use the new, more explicit `--with-save-baseline` and
+   `NeedleTestCase.save_baseline` options. Note that those new options will
+   systematically cause the baseline image files to be saved on disk,
+   overwriting potentially existing baseline files.
 
 0.1.0 (2014-02-20)
 ------------------
