@@ -43,6 +43,8 @@ class NeedleTestCase(TestCase):
 
     # TODO: More robust env handling:
     use_perceptualdiff = os.environ.get('NEEDLE_USE_PERCEPTUALDIFF', False)
+    perceptualdiff_path = 'perceptualdiff'
+    perceptualdiff_output_png = True
 
     @classmethod
     def setUpClass(cls):
@@ -141,15 +143,29 @@ class NeedleTestCase(TestCase):
                 fresh_screenshot.save(output_file)
 
                 if self.use_perceptualdiff:
-                    diff_filename = output_file.replace(".png", ".diff.ppm")
-                    try:
-                        # BUG: figure out how best to convert threshold distances to pixel counts
-                        subprocess.check_call(["perceptualdiff", "-output", diff_filename,
-                                               baseline_file, output_file])
-                    except subprocess.CalledProcessError:
+                    # TODO: figure out how best to convert threshold distances to pixel counts
+                    diff_ppm = output_file.replace(".png", ".diff.ppm")
+                    cmd = "%s -output %s %s %s" % (self.perceptualdiff_path, diff_ppm, baseline_file, output_file)
+                    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    perceptualdiff_stdout, _ = process.communicate()
+                    if process.returncode == 0:
+                        # No differences found
+                        return
+                    else:
+                        if os.path.exists(diff_ppm):
+                            if self.perceptualdiff_output_png:
+                                # Convert the .ppm output to .png
+                                diff_png = diff_ppm.replace("diff.ppm", "diff.png")
+                                Image.open(diff_ppm).save(diff_png)
+                                os.remove(diff_ppm)
+                                diff_file_msg = ' (See %s)' % diff_png
+                            else:
+                                diff_file_msg = ' (See %s)' % diff_ppm
+                        else:
+                            diff_file_msg = ''
                         raise AssertionError("The saved screenshot for '%s' did not match "
-                                             "the screenshot captured: see %s"
-                                             % (file, diff_filename))
+                                             "the screenshot captured%s:\n%s"
+                                             % (file, diff_file_msg, perceptualdiff_stdout))
 
         else:
             baseline_image = Image.open(file).convert('RGB')
