@@ -1,9 +1,18 @@
-from needle.plugin import NeedleCapturePlugin
-from nose.plugins import PluginTester
+import sys
 import os
-import unittest2
 
-class BasePluginTest(PluginTester, unittest2.TestCase):
+from nose.plugins import PluginTester
+
+from needle.plugin import NeedleCapturePlugin
+
+
+if sys.version_info > (2, 7):
+    from unittest import TestCase
+else:
+    from unittest2 import TestCase
+
+
+class BasePluginTest(PluginTester, TestCase):
     activate = '--with-needle-capture'
     plugins = [NeedleCapturePlugin()]
     suitepath = 'tests/plugin_test_cases/red_box.py'

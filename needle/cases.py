@@ -1,5 +1,6 @@
 # encoding: utf-8
 from __future__ import absolute_import
+from __future__ import print_function
 
 from contextlib import contextmanager
 import os
@@ -10,6 +11,10 @@ if sys.version_info > (2, 7):
     from unittest import TestCase
 else:
     from unittest2 import TestCase
+
+if sys.version_info >= (3, 0):
+    basestring = str
+
 
 from PIL import Image
 
@@ -75,7 +80,7 @@ class NeedleTestCase(TestCase):
 
         for i in (self.baseline_directory, self.output_directory):
             if not os.path.exists(i):
-                print >>sys.stderr, "Creating %s" % i
+                print('Creating %s' % i, file=sys.stderr)
                 os.makedirs(i)
 
     @classmethod
