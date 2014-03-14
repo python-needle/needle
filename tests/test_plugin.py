@@ -10,7 +10,7 @@ else:
     from unittest2 import TestCase
 
 baseline_filename = 'screenshots/baseline/red_box.png'
-dummy_baseline_content = 'abcd'
+dummy_baseline_content = b'abcd'
 
 
 class NeedleCaptureTest(PluginTester, TestCase):
@@ -48,7 +48,7 @@ class NeedleCaptureOverwriteTest(PluginTester, TestCase):
         self.assertFalse(os.path.exists(baseline_filename))
 
         # Create dummy baseline file
-        baseline = open(baseline_filename, 'w')
+        baseline = open(baseline_filename, 'wb')
         baseline.write(dummy_baseline_content)
         baseline.close()
 
@@ -58,7 +58,7 @@ class NeedleCaptureOverwriteTest(PluginTester, TestCase):
         os.remove(baseline_filename)
 
     def test_existing_baseline_not_overwritten(self):
-        baseline = open(baseline_filename, 'r')
+        baseline = open(baseline_filename, 'rb')
         self.assertEqual(baseline.read(), dummy_baseline_content)
         self.assertTrue(self.nose.success)
 
@@ -99,7 +99,7 @@ class SaveBaselineOverwriteTest(PluginTester, TestCase):
         self.assertFalse(os.path.exists(baseline_filename))
 
         # Create dummy baseline file
-        baseline = open(baseline_filename, 'w')
+        baseline = open(baseline_filename, 'wb')
         baseline.write(dummy_baseline_content)
         baseline.close()
 
@@ -109,6 +109,6 @@ class SaveBaselineOverwriteTest(PluginTester, TestCase):
         os.remove(baseline_filename)
 
     def test_existing_baseline_is_overwritten(self):
-        baseline = open(baseline_filename, 'r')
-        self.assertNotEqual(baseline.read(), dummy_baseline_content.decode('utf-8'))
+        baseline = open(baseline_filename, 'rb')
+        self.assertNotEqual(baseline.read(), dummy_baseline_content)
         self.assertTrue(self.nose.success)
