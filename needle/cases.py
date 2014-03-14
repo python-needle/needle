@@ -143,7 +143,13 @@ class NeedleTestCase(TestCase):
                 element.get_screenshot().save(baseline_file)
                 return
             else:
+                if not os.path.exists(baseline_file):
+                    raise IOError('The baseline screenshot %s does not exist. '
+                                  'You might want to re-run this test in baseline-saving mode.'
+                                  % baseline_file)
+
                 baseline_image = Image.open(baseline_file)
+
                 fresh_screenshot = element.get_screenshot()
                 fresh_screenshot.save(output_file)
 
