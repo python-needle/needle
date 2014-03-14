@@ -110,5 +110,5 @@ class SaveBaselineOverwriteTest(PluginTester, TestCase):
 
     def test_existing_baseline_is_overwritten(self):
         baseline = open(baseline_filename, 'r')
-        self.assertNotEqual(baseline.read(), dummy_baseline_content.encode('ascii'))
+        self.assertNotEqual(baseline.read(), dummy_baseline_content.decode('utf-8'))
         self.assertTrue(self.nose.success)
