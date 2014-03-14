@@ -189,9 +189,9 @@ class NeedleTestCase(TestCase):
                                 diff_file_msg = ' (See %s)' % diff_ppm
                         else:
                             diff_file_msg = ''
-                        raise AssertionError("The saved screenshot for '%s' did not match "
-                                             "the screenshot captured%s:\n%s"
-                                             % (file, diff_file_msg, perceptualdiff_stdout))
+                        raise AssertionError("The new screenshot '%s' did not match "
+                                             "the baseline '%s'%s:\n%s"
+                                             % (output_file, baseline_file, diff_file_msg, perceptualdiff_stdout))
 
         else:
             baseline_image = Image.open(file).convert('RGB')
