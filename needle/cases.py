@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+from warnings import warn
 from contextlib import contextmanager
 import os
 import subprocess
@@ -41,7 +42,8 @@ class NeedleTestCase(TestCase):
     }
     driver_browser_profile = None
 
-    capture = False
+    capture = False  # Deprecated
+    save_baseline = False
 
     viewport_width = 1024
     viewport_height = 768
@@ -55,6 +57,8 @@ class NeedleTestCase(TestCase):
     def setUpClass(cls):
         if os.environ.get('NEEDLE_CAPTURE'):
             cls.capture = True
+        if os.environ.get('NEEDLE_SAVE_BASELINE'):
+            cls.save_baseline = True
         cls.driver = cls.get_web_driver()
         cls.driver.set_window_position(0, 0)
         cls.set_viewport_size(cls.viewport_width, cls.viewport_height)
@@ -134,12 +138,23 @@ class NeedleTestCase(TestCase):
             baseline_file = os.path.join(self.baseline_directory, '%s.png' % file)
             output_file = os.path.join(self.output_directory, '%s.png' % file)
 
-            if self.capture and os.path.exists(baseline_file):
-                self.skipTest('Not capturing %s, image already exists. If you '
-                              'want to capture this element again, delete %s'
-                              % (file, baseline_file))
+            # Determine whether we should save the baseline image
+            save_baseline = False
+            if self.save_baseline:
+                save_baseline = True
+            elif self.capture:
+                warn("The 'NeedleTestCase.capture' attribute and '--with-save-baseline' nose option "
+                     "are deprecated since version 0.2.0. Use 'save_baseline' and '--with-save-baseline' "
+                     "instead. See the changelog for more information.",
+                     PendingDeprecationWarning)
+                if os.path.exists(baseline_file):
+                    self.skipTest('Not capturing %s, its baseline image already exists. If you '
+                                  'want to capture this element again, delete %s'
+                                  % (file, baseline_file))
+                else:
+                    save_baseline = True
 
-            if self.capture:
+            if save_baseline:
                 element.get_screenshot().save(baseline_file)
                 return
             else:
@@ -174,9 +189,9 @@ class NeedleTestCase(TestCase):
                                 diff_file_msg = ' (See %s)' % diff_ppm
                         else:
                             diff_file_msg = ''
-                        raise AssertionError("The saved screenshot for '%s' did not match "
-                                             "the screenshot captured%s:\n%s"
-                                             % (file, diff_file_msg, perceptualdiff_stdout))
+                        raise AssertionError("The new screenshot '%s' did not match "
+                                             "the baseline '%s'%s:\n%s"
+                                             % (output_file, baseline_file, diff_file_msg, perceptualdiff_stdout))
 
         else:
             baseline_image = Image.open(file).convert('RGB')
