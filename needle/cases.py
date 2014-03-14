@@ -19,7 +19,8 @@ if sys.version_info >= (3, 0):
 from PIL import Image
 
 from needle.diff import ImageDiff
-from needle.driver import NeedleWebDriver, NeedleWebElement
+from needle.driver import (NeedleFirefox, NeedleChrome, NeedleIe, NeedleOpera,
+                           NeedleSafari, NeedlePhantomJS, NeedleWebElement)
 
 
 def _object_filename(obj):
@@ -31,15 +32,8 @@ class NeedleTestCase(TestCase):
     A `unittest2 <http://www.voidspace.org.uk/python/articles/unittest2.shtml>`_
     test case which provides tools for testing CSS with Selenium.
     """
-    #: An instance of :py:class:`~needle.driver.NeedleWebDriver`, created when
-    #: each test is run.
-    driver = None
 
-    driver_command_executor = 'http://127.0.0.1:4444/wd/hub'
-    driver_desired_capabilities = {
-        'browserName': os.environ.get('NEEDLE_BROWSER', 'firefox'),
-    }
-    driver_browser_profile = None
+    driver = None
 
     capture = False
 
@@ -62,14 +56,27 @@ class NeedleTestCase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        super(NeedleTestCase, cls).tearDownClass()
         cls.driver.quit()
+        super(NeedleTestCase, cls).tearDownClass()
 
     @classmethod
     def get_web_driver(cls):
-        return NeedleWebDriver(cls.driver_command_executor,
-                               cls.driver_desired_capabilities,
-                               cls.driver_browser_profile)
+        """
+        Returns the WebDriver instance to be used. Defaults to `NeedleFirefox()`.
+        Override this method if you'd like to control the logic for choosing
+        the proper WebDriver instance.
+        """
+        browser_name = os.environ.get('NEEDLE_BROWSER')
+        browser_map = {
+            'firefox': NeedleFirefox,
+            'chrome': NeedleChrome,
+            'ie': NeedleIe,
+            'opera': NeedleOpera,
+            'safari': NeedleSafari,
+            'phantomjs': NeedlePhantomJS,
+        }
+        browser_class = browser_map.get(browser_name, NeedleFirefox)
+        return browser_class()
 
     def __init__(self, *args, **kwargs):
         super(NeedleTestCase, self).__init__(*args, **kwargs)
