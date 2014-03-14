@@ -1,10 +1,14 @@
 language: python
 python:
   - "2.7"
+  - "2.6"
+  - "3.2"
+  - "3.3"
 install:
   - pip install -e .
 before_script:
   - wget http://selenium-release.storage.googleapis.com/2.40/selenium-server-standalone-2.40.0.jar
   - nohup java -jar selenium-server-standalone-2.40.0.jar  > ./selenium.log &
+  - sleep 20
 script:
   - NEEDLE_BROWSER=phantomjs nosetests

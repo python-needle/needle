@@ -3,12 +3,18 @@ from __future__ import absolute_import
 
 import base64
 import os
-import urllib
+import sys
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+if sys.version_info >= (3, 0):
+    from urllib.parse import quote
+    from io import BytesIO as IOClass
+else:
+    from urllib import quote
+    try:
+        from cStringIO import StringIO as IOClass
+    except ImportError:
+        from StringIO import StringIO as IOClass
+
 
 from PIL import Image
 
@@ -72,14 +78,14 @@ class NeedleWebDriverMixin(object):
         Similar to :py:meth:`get`, but instead of passing a URL to load in the
         browser, the HTML for the page is provided.
         """
-        self.get('data:text/html,'+urllib.quote(html))
+        self.get('data:text/html,' + quote(html))
 
     def get_screenshot_as_image(self):
         """
         Returns a screenshot of the current page as an RGB
         `PIL image <http://www.pythonware.com/library/pil/handbook/image.htm>`_.
         """
-        fh = StringIO(base64.b64decode(self.get_screenshot_as_base64()))
+        fh = IOClass(base64.b64decode(self.get_screenshot_as_base64().encode('ascii')))
         return Image.open(fh).convert('RGB')
 
     def load_jquery(self):

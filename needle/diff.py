@@ -1,4 +1,11 @@
-from itertools import izip, chain
+import sys
+from itertools import chain
+
+if sys.version_info >= (3, 0):
+    izip = zip
+else:
+    from itertools import izip
+
 import math
 
 class ImageDiff(object):
@@ -34,5 +41,5 @@ class ImageDiff(object):
         for a, b in izip(a_values, b_values):
             distance += abs(float(a) / band_len - float(b) / band_len) / 255
         return distance
-    
+
 

@@ -1,5 +1,6 @@
 # encoding: utf-8
 from __future__ import absolute_import
+from __future__ import print_function
 
 from warnings import warn
 from contextlib import contextmanager
@@ -11,6 +12,10 @@ if sys.version_info > (2, 7):
     from unittest import TestCase
 else:
     from unittest2 import TestCase
+
+if sys.version_info >= (3, 0):
+    basestring = str
+
 
 from PIL import Image
 
@@ -79,7 +84,7 @@ class NeedleTestCase(TestCase):
 
         for i in (self.baseline_directory, self.output_directory):
             if not os.path.exists(i):
-                print >>sys.stderr, "Creating %s" % i
+                print('Creating %s' % i, file=sys.stderr)
                 os.makedirs(i)
 
     @classmethod
@@ -153,7 +158,13 @@ class NeedleTestCase(TestCase):
                 element.get_screenshot().save(baseline_file)
                 return
             else:
+                if not os.path.exists(baseline_file):
+                    raise IOError('The baseline screenshot %s does not exist. '
+                                  'You might want to re-run this test in baseline-saving mode.'
+                                  % baseline_file)
+
                 baseline_image = Image.open(baseline_file)
+
                 fresh_screenshot = element.get_screenshot()
                 fresh_screenshot.save(output_file)
 

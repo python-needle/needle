@@ -1,9 +1,16 @@
 import math
+import sys
+
+if sys.version_info > (2, 7):
+    from unittest import TestCase
+else:
+    from unittest2 import TestCase
+
+
 from needle.diff import ImageDiff
-import unittest2
 from . import ImageTestCaseMixin
 
-class TestImageDiff(ImageTestCaseMixin, unittest2.TestCase):
+class TestImageDiff(ImageTestCaseMixin, TestCase):
     def test_nrmsd_all_channels(self):
         diff = ImageDiff(self.get_white_image(), self.get_black_image())
         self.assertEqual(diff.get_nrmsd(), 1)

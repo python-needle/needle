@@ -1,14 +1,19 @@
+import sys
+import os
+
 from needle.plugin import NeedleCapturePlugin, SaveBaselinePlugin
 from nose.plugins import PluginTester
-import os
-import unittest2
 
+if sys.version_info > (2, 7):
+    from unittest import TestCase
+else:
+    from unittest2 import TestCase
 
 baseline_filename = 'screenshots/baseline/red_box.png'
 dummy_baseline_content = 'abcd'
 
 
-class NeedleCaptureTest(PluginTester, unittest2.TestCase):
+class NeedleCaptureTest(PluginTester, TestCase):
     """
     Check that the baseline file gets saved when using the
     --with-needle-capture option.
@@ -29,7 +34,7 @@ class NeedleCaptureTest(PluginTester, unittest2.TestCase):
         self.assertTrue(self.nose.success)
 
 
-class NeedleCaptureOverwriteTest(PluginTester, unittest2.TestCase):
+class NeedleCaptureOverwriteTest(PluginTester, TestCase):
     """
     Check that an existing baseline file does NOT get overwritten, when using
     the --with-needle-capture option.
@@ -59,7 +64,7 @@ class NeedleCaptureOverwriteTest(PluginTester, unittest2.TestCase):
 
 
 
-class SaveBaselineTest(PluginTester, unittest2.TestCase):
+class SaveBaselineTest(PluginTester, TestCase):
     """
     Check that the baseline file gets saved when using the
     --with-save-baseline option.
@@ -80,7 +85,7 @@ class SaveBaselineTest(PluginTester, unittest2.TestCase):
         self.assertTrue(self.nose.success)
 
 
-class SaveBaselineOverwriteTest(PluginTester, unittest2.TestCase):
+class SaveBaselineOverwriteTest(PluginTester, TestCase):
     """
     Check that an existing baseline file DOES get overwritten, when using
     the --with-save-baseline option.
