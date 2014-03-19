@@ -1,6 +1,16 @@
 Change log
 ==========
 
+0.2.0 (upcoming)
+----------------
+
+- Removed the necessity to run the Selenium server by using a Firefox web
+  driver instance by default. This is slightly backwards-incompatible if you
+  relied on the now-removed `driver_command_executor`,
+  `driver_desired_capabilities` and `driver_browser_profile` attributes.
+  To control the logic for selecting the proper web driver, you may simply
+  override the `get_web_driver()` method.
+
 0.1.0 (2014-02-20)
 ------------------
 

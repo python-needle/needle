@@ -1,7 +1,7 @@
 Needle: Automated tests for your CSS
 ====================================
 
-Needle is a tool for testing your CSS with `Selenium <http://seleniumhq.org/>`_ 
+Needle is a tool for testing your CSS with `Selenium <http://seleniumhq.org/>`_
 and `nose <http://somethingaboutorange.com/mrl/projects/nose/>`_.
 
 It checks that CSS renders correctly by taking screenshots of portions of
@@ -19,15 +19,9 @@ As root, or in a `virtualenv <http://www.virtualenv.org/>`_::
 
     $ pip install needle
 
-Download `selenium-server-standalone-2.8.0.jar <http://selenium.googlecode.com/files/selenium-server-standalone-2.8.0.jar>`_. By default, Selenium requires `Firefox 4 <http://getfirefox.com>`_.
-
 
 Getting started
 ---------------
-
-Run the Selenium server::
-
-    $ java -jar selenium-server-standalone-2.8.0.jar
 
 Create ``test_bbc.py`` in an empty directory::
 
@@ -38,9 +32,9 @@ Create ``test_bbc.py`` in an empty directory::
             self.driver.get('http://www.bbc.co.uk/news/')
             self.assertScreenshot('#blq-mast', 'bbc-masthead')
 
-This is a test case which tells the Selenium server to open BBC News and check
-the bar across the top of the page looks correct. 
-:py:meth:`~needle.cases.NeedleTestCase.assertScreenshot` take two arguments: a 
+This is a test case which tells the Selenium web driver (by default Firefox)
+to open BBC News and check the bar across the top of the page looks correct.
+:py:meth:`~needle.cases.NeedleTestCase.assertScreenshot` take two arguments: a
 CSS selector for the element we are capturing and a filename for the image.
 
 To create an initial screenshot of the logo, we need to run Needle in capture mode::
@@ -54,14 +48,14 @@ the screenshot on disk::
 
     $ nosetests test_bbc.py
 
-If a regression in your CSS causes them to become significantly different, the 
+If a regression in your CSS causes them to become significantly different, the
 test will fail.
 
 
 Advanced example
 ----------------
 
-Needle adds :doc:`a few useful methods <api/driver>` to 
+Needle adds :doc:`a few useful methods <api/driver>` to
 Selenium's WebElement object. For example, we can check computed CSS values::
 
     from needle.cases import NeedleTestCase
@@ -74,7 +68,6 @@ Selenium's WebElement object. For example, we can check computed CSS values::
             self.assertEqual(e.get_computed_property('font-size'), '13px')
 
 
-
 API
 ---
 
@@ -83,7 +76,6 @@ API
 
     api/cases
     api/driver
-
 
 
 Indices and tables

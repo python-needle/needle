@@ -18,8 +18,15 @@ else:
 
 from PIL import Image
 
-from selenium.webdriver.remote.webdriver import WebDriver
+
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.firefox.webdriver import WebDriver as Firefox
+from selenium.webdriver.chrome.webdriver import WebDriver as Chrome
+from selenium.webdriver.ie.webdriver import WebDriver as Ie
+from selenium.webdriver.opera.webdriver import WebDriver as Opera
+from selenium.webdriver.safari.webdriver import WebDriver as Safari
+from selenium.webdriver.phantomjs.webdriver import WebDriver as PhantomJS
+from selenium.webdriver.remote.webdriver import WebDriver as Remote
 
 
 class NeedleWebElement(WebElement):
@@ -108,12 +115,44 @@ class NeedleWebDriverMixin(object):
         return NeedleWebElement(self, *args, **kwargs)
 
 
-class NeedleWebDriver(NeedleWebDriverMixin, WebDriver):
+class NeedleRemote(NeedleWebDriverMixin, Remote):
     """
-    A browser window that Selenium has opened.
+    The same as Selenium's remote WebDriver, but with NeedleWebDriverMixin's
+    functionality.
+    """
 
-    It is a Selenium :py:class:`~selenium.webdriver.remote.webdriver.WebDriver`
-    object with some extra methods for testing CSS. See
-    `Selenium's documentation <http://seleniumhq.org/docs/03_webdriver.html>`_
-    for more information.
+class NeedlePhantomJS(NeedleWebDriverMixin, PhantomJS):
+    """
+    The same as Selenium's PhantomJS WebDriver, but with NeedleWebDriverMixin's
+    functionality.
+    """
+
+class NeedleFirefox(NeedleWebDriverMixin, Firefox):
+    """
+    The same as Selenium's Firefox WebDriver, but with NeedleWebDriverMixin's
+    functionality.
+    """
+
+class NeedleChrome(NeedleWebDriverMixin, Chrome):
+    """
+    The same as Selenium's Chrome WebDriver, but with NeedleWebDriverMixin's
+    functionality.
+    """
+
+class NeedleIe(NeedleWebDriverMixin, Ie):
+    """
+    The same as Selenium's Internet Explorer WebDriver, but with
+    NeedleWebDriverMixin's functionality.
+    """
+
+class NeedleOpera(NeedleWebDriverMixin, Opera):
+    """
+    The same as Selenium's Opera WebDriver, but with NeedleWebDriverMixin's
+    functionality.
+    """
+
+class NeedleSafari(NeedleWebDriverMixin, Safari):
+    """
+    The same as Selenium's Safari WebDriver, but with NeedleWebDriverMixin's
+    functionality.
     """
