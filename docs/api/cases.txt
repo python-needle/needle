@@ -10,6 +10,6 @@ Test cases
 
     .. autoattribute:: driver
 
-    .. automethod:: assertScreenshot(element, file, threshold=0.1)
+    .. automethod:: assertScreenshot(element, file, threshold=0)
 
     .. automethod:: get_web_driver

@@ -105,7 +105,7 @@ class NeedleTestCase(TestCase):
 
         cls.driver.set_window_size(viewport_width + delta, viewport_height)
 
-    def assertScreenshot(self, element_or_selector, file, threshold=0.1):
+    def assertScreenshot(self, element_or_selector, file, threshold=0):
         """assert-style variant of compareScreenshot context manager
 
         compareScreenshot() can be considerably more efficient for recording baselines by avoiding the need
@@ -117,7 +117,7 @@ class NeedleTestCase(TestCase):
             pass
 
     @contextmanager
-    def compareScreenshot(self, element_or_selector, file, threshold=0.1):
+    def compareScreenshot(self, element_or_selector, file, threshold=0):
         """
         Assert that a screenshot of an element is the same as a screenshot on disk,
         within a given threshold.
