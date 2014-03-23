@@ -6,6 +6,7 @@ Change log
 
  - Added support for Python 3.
  - Changed default threshold from 0.1 to 0.
+ - Added configurable way of plugging external diff engines like PerceptualDiff.
  - Removed the necessity to run the Selenium server by using a Firefox web
    driver instance by default. This is slightly backwards-incompatible if you
    relied on the now-removed `driver_command_executor`,

@@ -5,7 +5,6 @@ from __future__ import print_function
 from warnings import warn
 from contextlib import contextmanager
 import os
-import subprocess
 import sys
 
 if sys.version_info > (2, 7):
@@ -28,6 +27,16 @@ def _object_filename(obj):
     return os.path.abspath(sys.modules[type(obj).__module__].__file__)
 
 
+def import_from_string(path):
+    """
+    Utility function to dynamically load a class specified by a string,
+    e.g. 'path.to.my.Class'.
+    """
+    module_name, klass = path.rsplit('.', 1)
+    module = __import__(module_name, fromlist=[klass])
+    return getattr(module, klass)
+
+
 class NeedleTestCase(TestCase):
     """
     A `unittest2 <http://www.voidspace.org.uk/python/articles/unittest2.shtml>`_
@@ -42,10 +51,7 @@ class NeedleTestCase(TestCase):
     viewport_width = 1024
     viewport_height = 768
 
-    # TODO: More robust env handling:
-    use_perceptualdiff = os.environ.get('NEEDLE_USE_PERCEPTUALDIFF', False)
-    perceptualdiff_path = 'perceptualdiff'
-    perceptualdiff_output_png = True
+    diff_engine_class = 'needle.diff.PILEngine'
 
     @classmethod
     def setUpClass(cls):
@@ -53,6 +59,11 @@ class NeedleTestCase(TestCase):
             cls.capture = True
         if os.environ.get('NEEDLE_SAVE_BASELINE'):
             cls.save_baseline = True
+
+        # Instantiate the diff engine
+        klass = import_from_string(cls.diff_engine_class)
+        cls.diff_engine = klass()
+
         cls.driver = cls.get_web_driver()
         cls.driver.set_window_position(0, 0)
         cls.set_viewport_size(cls.viewport_width, cls.viewport_height)
@@ -141,7 +152,17 @@ class NeedleTestCase(TestCase):
         else:
             element = element_or_selector
 
-        if isinstance(file, basestring):
+        if not isinstance(file, basestring):
+            # Comparing in-memory files instead of on-disk files
+            baseline_image = Image.open(file).convert('RGB')
+            fresh_screenshot = element.get_screenshot()
+            diff = ImageDiff(fresh_screenshot, baseline_image)
+            distance = abs(diff.get_distance())
+            if distance > threshold:
+                raise AssertionError("The new screenshot did not match "
+                                     "the baseline (by a distance of %.2f)"
+                                     % distance)
+        else:
             baseline_file = os.path.join(self.baseline_directory, '%s.png' % file)
             output_file = os.path.join(self.output_directory, '%s.png' % file)
 
@@ -162,6 +183,7 @@ class NeedleTestCase(TestCase):
                     save_baseline = True
 
             if save_baseline:
+                # Save the baseline screenshot and bail out
                 element.get_screenshot().save(baseline_file)
                 return
             else:
@@ -170,44 +192,7 @@ class NeedleTestCase(TestCase):
                                   'You might want to re-run this test in baseline-saving mode.'
                                   % baseline_file)
 
-                baseline_image = Image.open(baseline_file)
+                # Save the new screenshot
+                element.get_screenshot().save(output_file)
 
-                fresh_screenshot = element.get_screenshot()
-                fresh_screenshot.save(output_file)
-
-                if self.use_perceptualdiff:
-                    # TODO: figure out how best to convert threshold distances to pixel counts
-                    diff_ppm = output_file.replace(".png", ".diff.ppm")
-                    cmd = "%s -output %s %s %s" % (self.perceptualdiff_path, diff_ppm, baseline_file, output_file)
-                    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    perceptualdiff_stdout, _ = process.communicate()
-                    if process.returncode == 0:
-                        # No differences found
-                        return
-                    else:
-                        if os.path.exists(diff_ppm):
-                            if self.perceptualdiff_output_png:
-                                # Convert the .ppm output to .png
-                                diff_png = diff_ppm.replace("diff.ppm", "diff.png")
-                                Image.open(diff_ppm).save(diff_png)
-                                os.remove(diff_ppm)
-                                diff_file_msg = ' (See %s)' % diff_png
-                            else:
-                                diff_file_msg = ' (See %s)' % diff_ppm
-                        else:
-                            diff_file_msg = ''
-                        raise AssertionError("The new screenshot '%s' did not match "
-                                             "the baseline '%s'%s:\n%s"
-                                             % (output_file, baseline_file, diff_file_msg, perceptualdiff_stdout))
-        else:
-            output_file = ''
-            baseline_file = ''
-            baseline_image = Image.open(file).convert('RGB')
-            fresh_screenshot = element.get_screenshot()
-
-        diff = ImageDiff(fresh_screenshot, baseline_image)
-        distance = abs(diff.get_distance())
-        if distance > threshold:
-            raise AssertionError("The new screenshot '%s' did not match "
-                                 "the baseline '%s' (by a distance of %.2f)"
-                                 % (output_file, baseline_file, distance))
+                self.diff_engine.assertSameFiles(output_file, baseline_file, threshold)
