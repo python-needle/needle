@@ -4,12 +4,13 @@ Change log
 0.2.0 (upcoming)
 ----------------
 
-- Removed the necessity to run the Selenium server by using a Firefox web
-  driver instance by default. This is slightly backwards-incompatible if you
-  relied on the now-removed `driver_command_executor`,
-  `driver_desired_capabilities` and `driver_browser_profile` attributes.
-  To control the logic for selecting the proper web driver, you may simply
-  override the `get_web_driver()` method.
+ - Added support for Python 3.
+ - Removed the necessity to run the Selenium server by using a Firefox web
+   driver instance by default. This is slightly backwards-incompatible if you
+   relied on the now-removed `driver_command_executor`,
+   `driver_desired_capabilities` and `driver_browser_profile` attributes.
+   To control the logic for selecting the proper web driver, you may simply
+   override the `get_web_driver()` method.
  - The `--with-needle-capture` and `NeedleTestCase.capture` options were
    deprecated and will be removed in version 0.4.0. Instead, you should now
    respectively use the new, more explicit `--with-save-baseline` and
