@@ -200,6 +200,8 @@ class NeedleTestCase(TestCase):
                                              "the baseline '%s'%s:\n%s"
                                              % (output_file, baseline_file, diff_file_msg, perceptualdiff_stdout))
         else:
+            output_file = ''
+            baseline_file = ''
             baseline_image = Image.open(file).convert('RGB')
             fresh_screenshot = element.get_screenshot()
 
