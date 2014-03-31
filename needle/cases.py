@@ -18,7 +18,7 @@ if sys.version_info >= (3, 0):
 
 from PIL import Image
 
-from needle.diff import ImageDiff
+from needle.engines.pil_engine import ImageDiff
 from needle.driver import (NeedleFirefox, NeedleChrome, NeedleIe, NeedleOpera,
                            NeedleSafari, NeedlePhantomJS, NeedleWebElement)
 
@@ -51,7 +51,7 @@ class NeedleTestCase(TestCase):
     viewport_width = 1024
     viewport_height = 768
 
-    diff_engine_class = 'needle.diff.PILEngine'
+    engine_class = 'needle.engines.pil_engine.Engine'
 
     @classmethod
     def setUpClass(cls):
@@ -61,8 +61,8 @@ class NeedleTestCase(TestCase):
             cls.save_baseline = True
 
         # Instantiate the diff engine
-        klass = import_from_string(cls.diff_engine_class)
-        cls.diff_engine = klass()
+        klass = import_from_string(cls.engine_class)
+        cls.engine = klass()
 
         cls.driver = cls.get_web_driver()
         cls.driver.set_window_position(0, 0)
@@ -195,4 +195,4 @@ class NeedleTestCase(TestCase):
                 # Save the new screenshot
                 element.get_screenshot().save(output_file)
 
-                self.diff_engine.assertSameFiles(output_file, baseline_file, threshold)
+                self.engine.assertSameFiles(output_file, baseline_file, threshold)

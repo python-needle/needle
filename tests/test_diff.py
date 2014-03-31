@@ -6,8 +6,7 @@ if sys.version_info > (2, 7):
 else:
     from unittest2 import TestCase
 
-
-from needle.diff import ImageDiff
+from needle.engines.pil_engine import ImageDiff
 from . import ImageTestCaseMixin
 
 class TestImageDiff(ImageTestCaseMixin, TestCase):
