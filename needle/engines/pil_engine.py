@@ -1,14 +1,31 @@
 import sys
 from itertools import chain
+import math
 
 if sys.version_info >= (3, 0):
     izip = zip
 else:
     from itertools import izip
 
-import math
+from needle.engines.base import EngineBase
+
+
+class Engine(EngineBase):
+
+    def assertSameFiles(self, output_file, baseline_file, threshold):
+        diff = ImageDiff(output_file, baseline_file)
+        distance = abs(diff.get_distance())
+        if distance > threshold:
+            raise AssertionError("The new screenshot '%s' did not match "
+                                 "the baseline '%s' (by a distance of %.2f)"
+                                 % (output_file, baseline_file, distance))
+
 
 class ImageDiff(object):
+    """
+    Utility class for performing image comparisons using PIL.
+    """
+
     def __init__(self, image_a, image_b):
         assert image_a.size == image_b.size
         assert image_a.getbands() == image_b.getbands()
@@ -41,5 +58,3 @@ class ImageDiff(object):
         for a, b in izip(a_values, b_values):
             distance += abs(float(a) / band_len - float(b) / band_len) / 255
         return distance
-
-
