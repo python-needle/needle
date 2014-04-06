@@ -19,6 +19,8 @@ Change log
    `NeedleTestCase.save_baseline` options. Note that those new options will
    systematically cause the baseline image files to be saved on disk,
    overwriting potentially existing baseline files.
+ - Removed the `NeedleWebElement.get_computed_property()` method. Instead, you
+   may use Selenium's built-in `value_of_css_property()` method.
 
 0.1.0 (2014-02-20)
 ------------------

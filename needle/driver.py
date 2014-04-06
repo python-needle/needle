@@ -66,15 +66,6 @@ class NeedleWebElement(WebElement):
             d['top'] + d['height'],
         ))
 
-    def get_computed_property(self, prop):
-        """
-        Returns the computed value of a CSS property.
-        """
-        self._parent.load_jquery()
-        return self._parent.execute_script("""
-            return $(arguments[0]).css(arguments[1]);
-        """, self, prop)
-
 
 class NeedleWebDriverMixin(object):
     """

@@ -13,7 +13,7 @@ class TestWebDriver(NeedleTestCase):
         self.assertEqual(
             self.driver.execute_script(
                 'return document.getElementsByTagName("div").length'
-            ), 
+            ),
             501
         )
         e = self.driver.find_element_by_id('test')
@@ -68,24 +68,3 @@ class TestWebElement(NeedleTestCase):
         self.assertEqual(im.size, (150, 200))
         for pixel in im.getdata():
             self.assertEqual(pixel, (255, 0, 0))
-
-    def test_get_computed_property(self):
-        self.driver.load_html("""
-            <style type="text/css">
-                #outer {
-                    font-size: 10px;
-                }
-                #inner {
-                    font-size: 2em;
-                    float: left;
-                }
-            </style>
-            <div id="outer">
-                <div id="inner">Hello!</div>
-            </div>
-        """)
-        e = self.driver.find_element_by_id('inner')
-        self.assertEqual(e.get_computed_property('font-size'), '20px')
-        self.assertEqual(e.get_computed_property('float'), 'left')
-
-
