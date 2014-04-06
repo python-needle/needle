@@ -106,15 +106,15 @@ class NeedleTestCase(TestCase):
                 os.makedirs(i)
 
     @classmethod
-    def set_viewport_size(cls, viewport_width, viewport_height):
-        cls.driver.set_window_size(viewport_width, viewport_height)
+    def set_viewport_size(cls, width, height):
+        cls.driver.set_window_size(width, height)
 
         # Measure the difference between the actual document width and the
         # desired viewport width so we can account for scrollbars:
         measured = cls.driver.execute_script("return {width: document.body.clientWidth, height: document.body.clientHeight};")
-        delta = viewport_width - measured['width']
+        delta = width - measured['width']
 
-        cls.driver.set_window_size(viewport_width + delta, viewport_height)
+        cls.driver.set_window_size(width + delta, height)
 
     def assertScreenshot(self, element_or_selector, file, threshold=0):
         """assert-style variant of compareScreenshot context manager
