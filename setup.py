@@ -41,5 +41,24 @@ setup(
         ]
     },
     install_requires=install_requires,
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: Browsers',
+        'Topic :: Multimedia :: Graphics :: Capture :: Screen Capture',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Software Development :: Testing',
+    ],
 )
 
