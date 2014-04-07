@@ -21,6 +21,7 @@ Change log
    overwriting potentially existing baseline files.
  - Removed the `NeedleWebElement.get_computed_property()` method. Instead, you
    may use Selenium's built-in `value_of_css_property()` method.
+ - Upgraded vendored jQuery to version 11.0.
 
 0.1.0 (2014-02-20)
 ------------------
