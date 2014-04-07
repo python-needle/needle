@@ -54,14 +54,79 @@ If a regression in your CSS causes them to become significantly different, the
 test will fail.
 
 
-API
----
+Selecting a WebDriver
+---------------------
 
-.. toctree::
-    :maxdepth: 2
+You may control which browser is used by Needle by overriding the
+``get_web_driver()`` method::
 
-    api/cases
-    api/driver
+    from needle.cases import NeedleTestCase
+    from needle.driver import NeedlePhantomJS
+
+    class MyTests(NeedleTestCase):
+
+        @classmethod
+        def get_web_driver(cls):
+            return NeedlePhantomJS()
+
+        def test_something(self):
+            ...
+
+By default Needle uses ``NeedleFirefox``, which is a wrapper of Selenium's
+built-in ``selenium.webdriver.firefox.webdriver.WebDriver`` class. You may use
+any of the following WebDrivers: ``NeedleRemote``, ``NeedlePhantomJS``,
+``NeedleFirefox``, ``NeedleChrome``, ``NeedleIe``, ``NeedleOpera`` and
+``NeedleSafari``. Refer to Selenium's documentation to learn how to install and
+configure any of those WebDrivers.
+
+
+Setting the viewport's size
+---------------------------
+
+You may set the size of the browser's viewport using the
+``set_viewport_size()`` method::
+
+    from needle.cases import NeedleTestCase
+
+    class MyTests(NeedleTestCase):
+
+        def test_something(self):
+            self.set_viewport_size(width=1024, height=768)
+            ...
+
+This is particularly useful to predict the size of the resulting screenshots
+when taking fullscreen captures, or to test responsive sites.
+
+You may also set the default viewport size for all your tests with the
+``viewport_width`` and ``viewport_height`` class attributes::
+
+    from needle.cases import NeedleTestCase
+
+    class MyTests(NeedleTestCase):
+        viewport_width = 1024
+        viewport_height = 768
+
+        ...
+
+Engines
+-------
+
+By default Needle uses the PIL engine (``needle.engines.pil_engine.Engine``)
+to take screenshots. Instead of PIL, you may also use PerceptualDiff::
+
+    from needle.cases import NeedleTestCase
+
+    class MyTests(NeedleTestCase):
+        engine_class = 'needle.engines.perceptualdiff_engine.Engine'
+
+        def test_something(self):
+            ...
+
+Besides being much faster than PIL, PerceptualDiff also generates a diff PNG
+file when a test fails, highlighting the differences between the baseline
+image and the new screenshot. Note that you will need to
+`download <http://pdiff.sourceforge.net/>`_ the ``perceptualdiff`` binary and
+place it in your ``PATH`` for this to work.
 
 
 Indices and tables
