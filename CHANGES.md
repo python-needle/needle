@@ -1,8 +1,8 @@
 Change log
 ==========
 
-0.2.0 (upcoming)
-----------------
+0.2.0 (2014-04-07)
+------------------
 
  - Added support for Python 3.
  - Changed default threshold from 0.1 to 0.
