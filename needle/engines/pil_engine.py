@@ -7,13 +7,17 @@ if sys.version_info >= (3, 0):
 else:
     from itertools import izip
 
+from PIL import Image
+
 from needle.engines.base import EngineBase
 
 
 class Engine(EngineBase):
 
     def assertSameFiles(self, output_file, baseline_file, threshold):
-        diff = ImageDiff(output_file, baseline_file)
+        output_image = Image.open(output_file).convert('RGB')
+        baseline_image = Image.open(baseline_file).convert('RGB')
+        diff = ImageDiff(output_image, baseline_image)
         distance = abs(diff.get_distance())
         if distance > threshold:
             raise AssertionError("The new screenshot '%s' did not match "
