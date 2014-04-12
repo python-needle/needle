@@ -6,6 +6,7 @@
 .*.swp
 .*.swn
 .*.swm
+.tox
 /build/
 /dist/
 selenium-server-standalone-*.jar
