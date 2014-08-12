@@ -200,6 +200,6 @@ class NeedleTestCase(TestCase):
     def assertCompareScreenshot(self, file1, file2, threshold=0):
         baseline_file = os.path.join(self.output_directory, '%s.png' % file1)
         output_file = os.path.join(self.output_directory, '%s.png' % file2)
-	if not os.path.exists(baseline_file):
+        if not os.path.exists(baseline_file):
                     raise IOError('File 1 does not exist')
-	self.engine.assertSameFiles(output_file, baseline_file, threshold)
+        self.engine.assertSameFiles(output_file, baseline_file, threshold)
