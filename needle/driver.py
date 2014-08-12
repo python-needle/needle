@@ -59,6 +59,13 @@ class NeedleWebElement(WebElement):
         Returns a screenshot of this element as a PIL image.
         """
         d = self.get_dimensions()
+        
+        # Cast values to int in order for _ImageCrop not to break
+        d['left'] = int(d['left'])
+        d['top'] = int(d['top'])
+        d['width'] = int(d['width'])
+        d['height'] = int(d['height'])
+        
         return self._parent.get_screenshot_as_image().crop((
             d['left'],
             d['top'],
