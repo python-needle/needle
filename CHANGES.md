@@ -1,6 +1,11 @@
 Change log
 ==========
 
+0.2.2 (2014-08-16)
+------------------
+
+- Fixed an issue with saving screenshots on Windows.
+
 0.2.1 (2014-04-10)
 ------------------
 
