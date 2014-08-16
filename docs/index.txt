@@ -17,6 +17,7 @@ If you haven't got `pip <http://www.pip-installer.org/>`_ installed::
 
 As root, or in a `virtualenv <http://www.virtualenv.org/>`_::
 
+    $ pip install selenium
     $ pip install needle
 
 
