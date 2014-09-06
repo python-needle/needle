@@ -13,7 +13,7 @@ class Engine(EngineBase):
 
     def assertSameFiles(self, output_file, baseline_file, threshold):
         # Calculate threshold value as a pixel number instead of percentage.
-        width, height = Image.open(open(output_file)).size
+        width, height = Image.open(output_file).size
         threshold = int(width * height * threshold)
 
         diff_ppm = output_file.replace(".png", ".diff.ppm")
