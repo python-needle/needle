@@ -36,3 +36,18 @@ Running Needle's test suite
     $ nosetests
 
 
+Running an individual test file
+-------------------------------
+
+To run a needle test against an already captured screenshot, use this:
+
+    $ nosetests mytest.py
+
+
+To run a test in "capture-mode" without any risk of overwriting any images you already have:
+
+    $ nosetests mytest.py --with-needle-capture
+
+To run a test in "capture-mode" overwriting any images you already have:
+
+    $ nosetests mytest.py --with-save-baseline
