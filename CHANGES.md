@@ -1,6 +1,11 @@
 Change log
 ==========
 
+0.2.4 (2015-02-08)
+------------------
+
+- Use selenium native element location instead of javascript call in order to assure crossplatform compatability.
+
 0.2.3 (2015-01-17)
 ------------------
 
