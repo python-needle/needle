@@ -130,6 +130,28 @@ image and the new screenshot. Note that you will need to
 place it in your ``PATH`` for this to work.
 
 
+File cleanup
+------------
+
+Each time you run tests, Needle will create new screenshot images on disk, for
+comparison with the baseline screenshots. It's then up to you whether you want
+to delete them or archive them.
+
+Set the ``cleanup_on_success`` class attribute to ``True`` to delete these
+files for all successful tests. Any screenshots that differ from the baseline
+will remain on disk for your inspection. Example::
+
+    from needle.cases import NeedleTestCase
+
+    class MyTests(NeedleTestCase):
+        cleanup_on_success = True
+
+        def test_something(self):
+            ...
+
+By default, ``cleanup_on_success`` is ``False``.
+
+
 Indices and tables
 ------------------
 
