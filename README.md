@@ -15,12 +15,14 @@ Example
 
 This is what a Needle test case looks like:
 
-    from needle.cases import NeedleTestCase
+```python
+from needle.cases import NeedleTestCase
 
-    class BBCNewsTest(NeedleTestCase):
-        def test_masthead(self):
-            self.driver.get('http://www.bbc.co.uk/news/')
-            self.assertScreenshot('#blq-mast', 'bbc-masthead')
+class BBCNewsTest(NeedleTestCase):
+    def test_masthead(self):
+        self.driver.get('http://www.bbc.co.uk/news/')
+        self.assertScreenshot('#blq-mast', 'bbc-masthead')
+```
 
 This example checks for regressions in the appearance of the BBC's masthead.
 
