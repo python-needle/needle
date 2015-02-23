@@ -1,5 +1,6 @@
 from nose.plugins import Plugin
 
+
 class NeedleCapturePlugin(Plugin):
     """
     A nose plugin which causes all calls to
@@ -18,7 +19,6 @@ class NeedleCapturePlugin(Plugin):
     def beforeTest(self, test):
         if hasattr(test, 'test'):
             test.test.capture = True
-
 
 
 class SaveBaselinePlugin(Plugin):
@@ -41,7 +41,6 @@ class SaveBaselinePlugin(Plugin):
     def beforeTest(self, test):
         if hasattr(test, 'test'):
             test.test.save_baseline = True
-
 
 
 class CleanUpOnSuccessPlugin(Plugin):

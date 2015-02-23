@@ -1,6 +1,6 @@
 from __future__ import with_statement
 from needle.cases import NeedleTestCase
-from PIL import Image
+
 from . import ImageTestCaseMixin
 
 class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
@@ -22,7 +22,7 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
     def test_assertScreenshot(self):
         self.create_div()
         self.assertScreenshot(
-            self.driver.find_element_by_id('test'), 
+            self.driver.find_element_by_id('test'),
             self.save_image_to_fh(self.get_black_image())
         )
 
@@ -38,7 +38,7 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
         with self.assertRaises(AssertionError):
             # Default threshold for error is 0
             self.assertScreenshot(
-                self.driver.find_element_by_id('test'), 
+                self.driver.find_element_by_id('test'),
                 self.save_image_to_fh(im)
             )
 
@@ -48,7 +48,7 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
         # Create one red pixel
         im.putpixel((0, 0), (255, 0, 0))
         self.assertScreenshot(
-            self.driver.find_element_by_id('test'), 
+            self.driver.find_element_by_id('test'),
             self.save_image_to_fh(im),
             threshold=1
         )
@@ -61,9 +61,7 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
         im.putpixel((1, 0), (255, 255, 255))
         with self.assertRaises(AssertionError):
             self.assertScreenshot(
-                self.driver.find_element_by_id('test'), 
+                self.driver.find_element_by_id('test'),
                 self.save_image_to_fh(im),
                 threshold=1
             )
-
-
