@@ -47,6 +47,7 @@ class NeedleTestCase(TestCase):
 
     capture = False  # Deprecated
     save_baseline = False
+    cleanup_on_success = False
 
     viewport_width = 1024
     viewport_height = 768
@@ -59,6 +60,8 @@ class NeedleTestCase(TestCase):
             cls.capture = True
         if os.environ.get('NEEDLE_SAVE_BASELINE'):
             cls.save_baseline = True
+        if os.environ.get('NEEDLE_CLEANUP_ON_SUCCESS'):
+            cls.cleanup_on_success = True
 
         # Instantiate the diff engine
         klass = import_from_string(cls.engine_class)
@@ -195,4 +198,10 @@ class NeedleTestCase(TestCase):
                 # Save the new screenshot
                 element.get_screenshot().save(output_file)
 
-                self.engine.assertSameFiles(output_file, baseline_file, threshold)
+                try:
+                    self.engine.assertSameFiles(output_file, baseline_file, threshold)
+                except:
+                    raise
+                else:
+                    if self.cleanup_on_success:
+                        os.remove(output_file)

@@ -37,7 +37,8 @@ setup(
     entry_points = {
         'nose.plugins.0.10': [
             'needle-capture = needle.plugin:NeedleCapturePlugin',
-            'save-baseline = needle.plugin:SaveBaselinePlugin'
+            'save-baseline = needle.plugin:SaveBaselinePlugin',
+            'needle-cleanup-on-success = needle.plugin:CleanUpOnSuccessPlugin',
         ]
     },
     install_requires=install_requires,

@@ -1,6 +1,11 @@
 Change log
 ==========
 
+0.3.0 (2015-02-22)
+------------------
+
+- Added the cleanup_on_success option for deleting screenshots after successful test runs.
+
 0.2.4 (2015-02-08)
 ------------------
 
