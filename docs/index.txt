@@ -151,6 +151,10 @@ will remain on disk for your inspection. Example::
 
 By default, ``cleanup_on_success`` is ``False``.
 
+You may also activate the file cleanup from the command line by using the
+``--with-needle-cleanup-on-success`` nose plugin:
+
+    $ nosetests --with-needle-cleanup-on-success
 
 Indices and tables
 ------------------
