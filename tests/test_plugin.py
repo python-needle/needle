@@ -1,7 +1,7 @@
 import sys
 import os
 
-from needle.plugin import NeedleCapturePlugin, SaveBaselinePlugin
+from needle.plugin import NeedleCapturePlugin, SaveBaselinePlugin, CleanUpOnSuccessPlugin
 from nose.plugins import PluginTester
 
 if sys.version_info > (2, 7):
@@ -11,6 +11,7 @@ else:
 
 
 baseline_filename = 'screenshots/baseline/red_box.png'
+screenshot_filename = 'screenshots/red_box.png'
 dummy_baseline_content = b'abcd'
 
 
@@ -112,4 +113,32 @@ class SaveBaselineOverwriteTest(PluginTester, TestCase):
     def test_existing_baseline_is_overwritten(self):
         baseline = open(baseline_filename, 'rb')
         self.assertNotEqual(baseline.read(), dummy_baseline_content)
+        self.assertTrue(self.nose.success)
+
+
+class NeedleCleanupOnSuccessTest(PluginTester, TestCase):
+    """
+    Check that the screenshot gets removed when using the
+    needle-cleanup-on-success option.
+    """
+    activate = '--with-needle-cleanup-on-success'
+    plugins = [CleanUpOnSuccessPlugin()]
+    suitepath = 'tests/plugin_test_cases/red_box.py'
+
+    def setUp(self):
+        # Create the baseline
+        baseline = open(baseline_filename, 'wb')
+        baseline.write(open('tests/test_red_box.png', 'rb').read())
+        baseline.close()
+
+        # Make sure the screenshot doesn't exist yet
+        self.assertFalse(os.path.exists(screenshot_filename))
+        super(NeedleCleanupOnSuccessTest, self).setUp()
+
+    def tearDown(self):
+        os.remove(baseline_filename)
+
+    def test_screenshot_is_cleanedup(self):
+        # Make sure the screenshot has been cleaned up
+        self.assertFalse(os.path.exists(screenshot_filename))
         self.assertTrue(self.nose.success)
