@@ -35,6 +35,4 @@ Full documentation is on [Read the Docs](http://needle.readthedocs.org/).
 Running Needle's test suite
 ---------------------------
 
-    $ nosetests
-
-
+    $ tox
