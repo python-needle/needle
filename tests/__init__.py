@@ -12,6 +12,7 @@ else:
 
 
 class ImageTestCaseMixin(object):
+
     def get_image(self, colour):
         return Image.new('RGB', (100, 100), colour)
 
@@ -30,9 +31,24 @@ class ImageTestCaseMixin(object):
         )
         return im
 
+    def load_black_div(self, text=''):
+        self.driver.load_html('''
+            <style type="text/css">
+                #black-box {
+                    position: absolute;
+                    left: 50px;
+                    top: 100px;
+                    width: 100px;
+                    height: 100px;
+                    background-color: black;
+                    color: white;
+                }
+            </style>
+            <div id="black-box">%s</div>
+        ''' % text)
+
     def save_image_to_fh(self, im):
         fh = IOClass()
         im.save(fh, 'PNG')
         fh.seek(0)
         return fh
-

@@ -9,7 +9,9 @@ else:
 from needle.engines.pil_engine import ImageDiff
 from . import ImageTestCaseMixin
 
+
 class TestImageDiff(ImageTestCaseMixin, TestCase):
+
     def test_nrmsd_all_channels(self):
         diff = ImageDiff(self.get_white_image(), self.get_black_image())
         self.assertEqual(diff.get_nrmsd(), 1)

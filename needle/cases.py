@@ -52,6 +52,9 @@ class NeedleTestCase(TestCase):
     viewport_width = 1024
     viewport_height = 768
 
+    output_directory = None
+    baseline_directory = None
+
     engine_class = 'needle.engines.pil_engine.Engine'
 
     @classmethod
@@ -99,9 +102,11 @@ class NeedleTestCase(TestCase):
     def __init__(self, *args, **kwargs):
         super(NeedleTestCase, self).__init__(*args, **kwargs)
         # TODO: should output directory be timestamped?
-        self.output_directory = os.environ.get('NEEDLE_OUTPUT_DIR', os.path.realpath(os.path.join(os.getcwd(), 'screenshots')))
+        if self.output_directory is None:
+            self.output_directory = os.environ.get('NEEDLE_OUTPUT_DIR', os.path.realpath(os.path.join(os.getcwd(), 'screenshots')))
         # TODO: Should baseline be a top-level peer to output_directory?
-        self.baseline_directory = os.environ.get('NEEDLE_BASELINE_DIR', os.path.realpath(os.path.join(os.getcwd(), 'screenshots', 'baseline')))
+        if self.baseline_directory is None:
+            self.baseline_directory = os.environ.get('NEEDLE_BASELINE_DIR', os.path.realpath(os.path.join(os.getcwd(), 'screenshots', 'baseline')))
 
         for i in (self.baseline_directory, self.output_directory):
             if not os.path.exists(i):

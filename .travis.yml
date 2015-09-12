@@ -1,12 +1,15 @@
 language: python
-sudo: false
+sudo: required
 python:
   - "2.7"
   - "2.6"
   - "3.2"
   - "3.3"
   - "3.4"
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y perceptualdiff
 install:
   - pip install -e .
 script:
-  - NEEDLE_BROWSER=phantomjs nosetests
+  - NEEDLE_BROWSER=phantomjs nosetests -v

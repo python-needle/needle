@@ -3,7 +3,9 @@ from needle.cases import NeedleTestCase
 
 from . import ImageTestCaseMixin
 
-class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
+
+class InMemoryTests(ImageTestCaseMixin, NeedleTestCase):
+
     def create_div(self):
         self.driver.load_html("""
             <style type="text/css">
@@ -28,7 +30,10 @@ class NeedleTestCaseTest(ImageTestCaseMixin, NeedleTestCase):
 
     def test_assertScreenshot_with_css_selector(self):
         self.create_div()
-        self.assertScreenshot('#test', self.save_image_to_fh(self.get_black_image()))
+        self.assertScreenshot(
+            '#test',
+            self.save_image_to_fh(self.get_black_image())
+        )
 
     def test_assertScreenshot_fails(self):
         self.create_div()

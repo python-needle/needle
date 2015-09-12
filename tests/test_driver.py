@@ -1,6 +1,7 @@
 from needle.cases import NeedleTestCase
 
 class TestWebDriver(NeedleTestCase):
+
     def test_load_html(self):
         self.driver.load_html('<div id="test">foo</div>')
         e = self.driver.find_element_by_id('test')
@@ -28,6 +29,7 @@ class TestWebDriver(NeedleTestCase):
 
 
 class TestWebElement(NeedleTestCase):
+
     def test_get_dimensions(self):
         self.driver.load_html("""
             <style type="text/css">
