@@ -1,12 +1,13 @@
-Needle: Automated tests for your CSS
-====================================
+Needle: Automated tests for your visuals
+========================================
 
-Needle is a tool for testing your CSS with `Selenium <http://seleniumhq.org/>`_
+Needle is a tool for testing your CSS and visuals with `Selenium <http://seleniumhq.org/>`_
 and `nose <http://somethingaboutorange.com/mrl/projects/nose/>`_.
 
-It checks that CSS renders correctly by taking screenshots of portions of
-a website and comparing them against known good screenshots. It also provides
-tools for testing calculated CSS values and the position of HTML elements.
+It checks that visuals (CSS/fonts/images/SVG/etc.) render correctly by taking
+screenshots of portions of a website and comparing them against known good
+screenshots. It also provides tools for testing calculated CSS values and the
+position of HTML elements.
 
 Installation
 ------------

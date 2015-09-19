@@ -3,12 +3,13 @@ Needle
 
 [![Build Status](https://travis-ci.org/bfirsh/needle.png?branch=master)](https://travis-ci.org/bfirsh/needle)
 
-Needle is a tool for testing your CSS with [Selenium](http://seleniumhq.org/) 
+Needle is a tool for testing visuals with [Selenium](http://seleniumhq.org/) 
 and [nose](http://somethingaboutorange.com/mrl/projects/nose/).
 
-It checks that CSS renders correctly by taking screenshots of portions of
-a website and comparing them against known good screenshots. It also provides
-tools for testing calculated CSS values and the position of HTML elements.
+It checks that visuals (CSS/fonts/images/SVG/etc.) render correctly by taking
+screenshots of portions of a website and comparing them against known good
+screenshots. It also provides tools for testing calculated CSS values and the
+position of HTML elements.
 
 Example
 -------
@@ -29,12 +30,21 @@ This example checks for regressions in the appearance of the BBC's masthead.
 Documentation
 -------------
 
-Full documentation is on [Read the Docs](http://needle.readthedocs.org/).
+Full documentation available on [Read the Docs](http://needle.readthedocs.org/).
 
+If you'd like to build the documentation yourself, first install ``sphinx``:
+
+    pip install sphinx
+    
+Then run:
+
+    cd docs
+    make html
+    
+The documentation will then be available browsable from
+``docs/_build/index.html``.
 
 Running Needle's test suite
 ---------------------------
 
     $ nosetests
-
-
