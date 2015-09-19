@@ -6,7 +6,7 @@ from needle.engines.base import EngineBase
 
 class Engine(EngineBase):
     compare_path = "compare"
-    compare_command = ("{compare} -metric RMSE -subimage-search {baseline} "
+    compare_command = ("{compare} -metric RMSE -subimage-search -dissimilarity-threshold 1.0 {baseline} "
                        "{new} {diff}")
 
     def assertSameFiles(self, output_file, baseline_file, threshold=0):

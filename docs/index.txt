@@ -113,7 +113,10 @@ Engines
 -------
 
 By default Needle uses the PIL engine (``needle.engines.pil_engine.Engine``)
-to take screenshots. Instead of PIL, you may also use PerceptualDiff::
+to take screenshots. Instead of PIL, you may also use PerceptualDiff or
+ImageMagick.
+
+Example with PerceptualDiff::
 
     from needle.cases import NeedleTestCase
 
@@ -123,12 +126,27 @@ to take screenshots. Instead of PIL, you may also use PerceptualDiff::
         def test_something(self):
             ...
 
-Besides being much faster than PIL, PerceptualDiff also generates a diff PNG
-file when a test fails, highlighting the differences between the baseline
-image and the new screenshot. Note that you will need to
-`download <http://pdiff.sourceforge.net/>`_ the ``perceptualdiff`` binary and
-place it in your ``PATH`` for this to work.
+Example with ImageMagick::
 
+    from needle.cases import NeedleTestCase
+
+    class MyTests(NeedleTestCase):
+        engine_class = 'needle.engines.imagemagick_engine.Engine'
+
+        def test_something(self):
+            ...
+
+Besides being much faster than PIL, PerceptualDiff and ImageMagick also
+generate a diff PNG file when a test fails, highlighting the differences
+between the baseline image and the new screenshot.
+
+Note that to use the PerceptualDiff engine you will first need to
+`download <http://pdiff.sourceforge.net/>`_ the ``perceptualdiff`` binary and
+place it in your ``PATH``.
+
+To use the ImageMagick engine you will need to install a package on your
+machine (e.g. ``sudo apt-get install imagemagick`` on Ubuntu or
+``brew install imagemagick`` on OSX).
 
 File cleanup
 ------------
