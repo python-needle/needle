@@ -4,7 +4,7 @@ Needle
 [![Build Status](https://travis-ci.org/bfirsh/needle.png?branch=master)](https://travis-ci.org/bfirsh/needle)
 
 Needle is a tool for testing visuals with [Selenium](http://seleniumhq.org/) 
-and [nose](http://somethingaboutorange.com/mrl/projects/nose/).
+and [nose](https://nose.readthedocs.io/).
 
 It checks that visuals (CSS/fonts/images/SVG/etc.) render correctly by taking
 screenshots of portions of a website and comparing them against known good
