@@ -30,7 +30,7 @@ This example checks for regressions in the appearance of the BBC's masthead.
 Documentation
 -------------
 
-Full documentation available on [Read the Docs](http://needle.readthedocs.org/).
+Full documentation available on [Read the Docs](https://needle.readthedocs.io/).
 
 If you'd like to build the documentation yourself, first install ``sphinx``:
 
