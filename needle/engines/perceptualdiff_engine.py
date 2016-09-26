@@ -22,8 +22,13 @@ class Engine(EngineBase):
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         perceptualdiff_stdout, _ = process.communicate()
 
-        if process.returncode == 0:
-            # No differences found
+        # Sometimes perceptualdiff returns a false positive with this exact message:
+        # 'FAIL: Images are visibly different\n0 pixels are different\n\n'
+        # We catch that here.
+        if process.returncode == 0 or b'\n0 pixels are different' in perceptualdiff_stdout:
+            # No differences found, but make sure to clean up the .ppm in case it was created.
+            if os.path.exists(diff_ppm):
+                os.remove(diff_ppm)
             return
         else:
             if os.path.exists(diff_ppm):
