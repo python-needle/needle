@@ -1,6 +1,11 @@
 Change log
 ==========
 
+Upcoming
+--------
+
+- Added support for Selenium 3.
+
 0.3.0 (2015-02-22)
 ------------------
 
