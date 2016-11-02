@@ -15,7 +15,7 @@ def read(*parts):
 
 install_requires = [
     'nose>=1.0.0',
-    'selenium>=2,<3',
+    'selenium>=2,<4',
     'pillow',
 ]
 
