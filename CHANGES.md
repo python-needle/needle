@@ -1,10 +1,12 @@
 Change log
 ==========
 
-Upcoming
---------
+0.4.0 (2016-12-21)
+------------------
 
 - Added support for Selenium 3.
+- Added ImageMagick engine.
+- Fixed an issue with false positives yielded by the Perceptual engine.
 
 0.3.0 (2015-02-22)
 ------------------
