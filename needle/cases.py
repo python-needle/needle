@@ -4,6 +4,7 @@ from __future__ import print_function
 
 from warnings import warn
 from contextlib import contextmanager
+from errno import EEXIST
 import os
 import sys
 
@@ -108,10 +109,21 @@ class NeedleTestCase(TestCase):
         if self.baseline_directory is None:
             self.baseline_directory = os.environ.get('NEEDLE_BASELINE_DIR', os.path.realpath(os.path.join(os.getcwd(), 'screenshots', 'baseline')))
 
-        for i in (self.baseline_directory, self.output_directory):
-            if not os.path.exists(i):
-                print('Creating %s' % i, file=sys.stderr)
-                os.makedirs(i)
+        # Create the output and baseline directories if they do not yet exist.
+        for dirname in (self.baseline_directory, self.output_directory):
+            # Recursively create the directory, handling its
+            # prior existence as a valid exception.
+            # This will guard against race conditions.
+            # E.g. when running tests in multithreaded mode
+            # they likely have the same directories specified
+            # and might encounter this block at the same time.
+            try:
+                os.makedirs(dirname)
+            except OSError as err:
+                if err.errno == EEXIST and os.path.isdir(dirname):
+                    pass
+                else:
+                    raise
 
     @classmethod
     def set_viewport_size(cls, width, height):
