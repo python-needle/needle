@@ -111,6 +111,12 @@ class NeedleTestCase(TestCase):
 
         # Create the output and baseline directories if they do not yet exist.
         for dirname in (self.baseline_directory, self.output_directory):
+            # Recursively create the directory, handling its
+            # prior existence as a valid exception.
+            # This will guard against race conditions.
+            # E.g. when running tests in multithreaded mode
+            # they likely have the same directories specified
+            # and might encounter this block at the same time.
             try:
                 os.makedirs(dirname)
             except OSError as err:
