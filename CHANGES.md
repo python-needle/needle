@@ -1,6 +1,11 @@
 Change log
 ==========
 
+0.4.1 (2017-01-04)
+------------------
+
+- Fixed a race condition in creating baseline and output directories.
+
 0.4.0 (2016-12-21)
 ------------------
 
