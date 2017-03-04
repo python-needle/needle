@@ -41,13 +41,16 @@ class NeedleWebElement(WebElement):
         Returns a dictionary containing, in pixels, the element's ``width`` and
         ``height``, and it's ``left`` and ``top`` position relative to the document.
         """
+
+        # Support for retina displays
+        dpr = self._parent.execute_script('return window.devicePixelRatio')
         location = self.location
         size = self.size
         return {
-            "top": location['y'],
-            "left": location['x'],
-            "width": size['width'],
-            "height": size['height']
+            "top": location['y'] * dpr,
+            "left": location['x'] * dpr,
+            "width": size['width'] * dpr,
+            "height": size['height'] * dpr
         }
 
     def get_screenshot(self):
