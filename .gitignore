@@ -1,6 +1,8 @@
 *.pyc
 *.egg-info
 .DS_Store
+.idea/
+.tox/
 *~
 .*.swo
 .*.swp
@@ -10,6 +12,8 @@
 /dist/
 selenium-server-standalone-*.jar
 /docs/_build
+/screenshots/
 tests/screenshots/*.png
+geckodriver.log
 ghostdriver.log
 __pycache__
