@@ -18,6 +18,10 @@ before_install:
   - sleep 3 # give xvfb some time to start
   - sudo apt-get update -qq
   - sudo apt-get install -y perceptualdiff imagemagick
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.15.0/geckodriver-v0.15.0-linux64.tar.gz
+  - mkdir geckodriver
+  - tar -xzf geckodriver-v0.15.0-linux64.tar.gz -C geckodriver
+  - export PATH=$PATH:$PWD/geckodriver
 addons:
   firefox: '52.0'
 install:
