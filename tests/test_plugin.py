@@ -1,5 +1,6 @@
 import sys
 import os
+from errno import EEXIST
 
 from needle.plugin import NeedleCapturePlugin, SaveBaselinePlugin, CleanUpOnSuccessPlugin
 from nose.plugins import PluginTester
@@ -13,6 +14,20 @@ else:
 baseline_filename = 'screenshots/baseline/red_box.png'
 screenshot_filename = 'screenshots/red_box.png'
 dummy_baseline_content = b'abcd'
+
+
+def create_baseline_dir():
+    """
+    Create the baseline images directory if it doesn't already exist.
+    """
+    dir_path = 'screenshots/baseline'
+    try:
+        os.makedirs(dir_path)
+    except OSError as err:
+        if err.errno == EEXIST and os.path.isdir(dir_path):
+            pass
+        else:
+            raise
 
 
 class NeedleCaptureTest(PluginTester, TestCase):
@@ -50,6 +65,7 @@ class NeedleCaptureOverwriteTest(PluginTester, TestCase):
         self.assertFalse(os.path.exists(baseline_filename))
 
         # Create dummy baseline file
+        create_baseline_dir()
         baseline = open(baseline_filename, 'wb')
         baseline.write(dummy_baseline_content)
         baseline.close()
@@ -101,6 +117,7 @@ class SaveBaselineOverwriteTest(PluginTester, TestCase):
         self.assertFalse(os.path.exists(baseline_filename))
 
         # Create dummy baseline file
+        create_baseline_dir()
         baseline = open(baseline_filename, 'wb')
         baseline.write(dummy_baseline_content)
         baseline.close()
@@ -127,6 +144,7 @@ class NeedleCleanupOnSuccessTest(PluginTester, TestCase):
 
     def setUp(self):
         # Create the baseline
+        create_baseline_dir()
         baseline = open(baseline_filename, 'wb')
         baseline.write(open('tests/test_red_box.png', 'rb').read())
         baseline.close()

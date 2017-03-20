@@ -6,6 +6,7 @@ from warnings import warn
 from contextlib import contextmanager
 from errno import EEXIST
 import os
+import signal
 import sys
 
 if sys.version_info > (2, 7):
@@ -78,6 +79,9 @@ class NeedleTestCase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        if isinstance(cls.driver, NeedlePhantomJS):
+            # Workaround for https://github.com/SeleniumHQ/selenium/issues/767
+            cls.driver.service.process.send_signal(signal.SIGTERM)
         cls.driver.quit()
         super(NeedleTestCase, cls).tearDownClass()
 

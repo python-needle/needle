@@ -18,7 +18,7 @@ else:
 
 from PIL import Image
 
-
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.firefox.webdriver import WebDriver as Firefox
 from selenium.webdriver.chrome.webdriver import WebDriver as Chrome
@@ -41,28 +41,56 @@ class NeedleWebElement(WebElement):
         Returns a dictionary containing, in pixels, the element's ``width`` and
         ``height``, and it's ``left`` and ``top`` position relative to the document.
         """
-        location = self.location
-        size = self.size
-        return {
-            "top": location['y'],
-            "left": location['x'],
-            "width": size['width'],
-            "height": size['height']
-        }
+        try:
+            # selenium >= 2.50.1 - W3C WebDriver spec compliant
+            # geckodriver needs this, doesn't support location and size
+            rect = self.rect
+            return {
+                "top": rect['y'],
+                "left": rect['x'],
+                "width": rect['width'],
+                "height": rect['height']
+            }
+        except (AttributeError, WebDriverException):
+            # Some drivers like PhantomJS don't support rect yet,
+            # go ahead and try location and size
+            location = self.location
+            size = self.size
+            return {
+                "top": location['y'],
+                "left": location['x'],
+                "width": size['width'],
+                "height": size['height']
+            }
 
     def get_screenshot(self):
         """
         Returns a screenshot of this element as a PIL image.
         """
         d = self.get_dimensions()
-        
+
         # Cast values to int in order for _ImageCrop not to break
         d['left'] = int(d['left'])
         d['top'] = int(d['top'])
         d['width'] = int(d['width'])
         d['height'] = int(d['height'])
-        
-        return self._parent.get_screenshot_as_image().crop((
+
+        image = None
+        try:
+            # selenium >= 2.35
+            fh = IOClass(self.screenshot_as_png)
+            image = Image.open(fh).convert('RGB')
+            # Check against PhantomJS returning a full-page screenshot
+            if image.size == (d['width'], d['height']):
+                return image
+        except (AttributeError, WebDriverException):
+            # Some drivers like PhantomJS don't yet support element
+            # screenshots; fall back to the old method below
+            pass
+
+        if not image:
+            image = self._parent.get_screenshot_as_image()
+        return image.crop((
             d['left'],
             d['top'],
             d['left'] + d['width'],
