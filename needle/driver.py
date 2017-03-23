@@ -18,7 +18,7 @@ else:
 
 from PIL import Image
 
-
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.firefox.webdriver import WebDriver as Firefox
 from selenium.webdriver.chrome.webdriver import WebDriver as Chrome
@@ -41,8 +41,13 @@ class NeedleWebElement(WebElement):
         Returns a dictionary containing, in pixels, the element's ``width`` and
         ``height``, and it's ``left`` and ``top`` position relative to the document.
         """
-        location = self.location
-        size = self.size
+        try:
+            # For selenium >= 2.50.1, W3C WebDriver spec drivers (like geckodriver)
+            location = size = self.rect
+        except (AttributeError, WebDriverException):
+            # For older selenium versions or older Selenium API drivers (like PhantomJS)
+            location = self.location
+            size = self.size
         return {
             "top": location['y'],
             "left": location['x'],
@@ -61,8 +66,19 @@ class NeedleWebElement(WebElement):
         d['top'] = int(d['top'])
         d['width'] = int(d['width'])
         d['height'] = int(d['height'])
-        
-        return self._parent.get_screenshot_as_image().crop((
+
+        try:
+            # For selenium >= 2.46.1, W3C WebDriver spec drivers (like geckodriver)
+            fh = IOClass(self.screenshot_as_png)
+            image = Image.open(fh).convert('RGB')
+            # Make sure it isn't actually a full-page screenshot (PhantomJS)
+            if image.size == (d['width'], d['height']):
+                return image
+        except (AttributeError, WebDriverException):
+            # Fall back to cropping a full page screenshot
+            image = self._parent.get_screenshot_as_image()
+
+        return image.crop((
             d['left'],
             d['top'],
             d['left'] + d['width'],

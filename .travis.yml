@@ -1,5 +1,6 @@
 language: python
 sudo: required
+dist: trusty
 python:
   - "2.7"
   - "3.2"
@@ -7,14 +8,29 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+# Firefox 48+ only works with geckodriver, first supported properly in selenium 3.0.0.b3
+# See https://github.com/SeleniumHQ/selenium/issues/2739#issuecomment-249482533
 env:
-  - SELENIUM_VERSION='<3'
-  - SELENIUM_VERSION='<4'
+  - SELENIUM_VERSION='<3' NEEDLE_BROWSER=chrome
+  - SELENIUM_VERSION='<4' NEEDLE_BROWSER=chrome
+  - SELENIUM_VERSION='<4' NEEDLE_BROWSER=firefox
+  - SELENIUM_VERSION='<3' NEEDLE_BROWSER=phantomjs
+  - SELENIUM_VERSION='<4' NEEDLE_BROWSER=phantomjs
 before_install:
+  - if [[ "$NEEDLE_BROWSER" != "phantomjs" ]]; then export DISPLAY=:99.0; fi
+  - if [[ "$NEEDLE_BROWSER" != "phantomjs" ]]; then sh -e /etc/init.d/xvfb start; fi
+  - if [[ "$NEEDLE_BROWSER" == "firefox" ]]; then wget https://github.com/mozilla/geckodriver/releases/download/v0.15.0/geckodriver-v0.15.0-linux64.tar.gz; fi
+  - if [[ "$NEEDLE_BROWSER" == "firefox" ]]; then mkdir geckodriver; fi
+  - if [[ "$NEEDLE_BROWSER" == "firefox" ]]; then tar -xzf geckodriver-v0.15.0-linux64.tar.gz -C geckodriver; fi
+  - if [[ "$NEEDLE_BROWSER" == "firefox" ]]; then export PATH=$PATH:$PWD/geckodriver; fi
   - sudo apt-get update -qq
   - sudo apt-get install -y perceptualdiff imagemagick
+  - if [[ "$NEEDLE_BROWSER" == "chrome" ]]; then sudo apt-get install -y chromium-chromedriver; fi
+  - if [[ "$NEEDLE_BROWSER" == "chrome" ]]; then export PATH=$PATH:/usr/lib/chromium-browser/; fi
+addons:
+  firefox: '52.0'
 install:
   - pip install "selenium ${SELENIUM_VERSION}"
   - pip install -e .
 script:
-  - NEEDLE_BROWSER=phantomjs nosetests -v
+  - nosetests -v
