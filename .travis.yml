@@ -19,6 +19,7 @@ env:
 before_install:
   - if [[ "$NEEDLE_BROWSER" != "phantomjs" ]]; then export DISPLAY=:99.0; fi
   - if [[ "$NEEDLE_BROWSER" != "phantomjs" ]]; then sh -e /etc/init.d/xvfb start; fi
+  - if [[ "$NEEDLE_BROWSER" != "phantomjs" ]]; then sleep 3; fi # give xvfb some time to start
   - if [[ "$NEEDLE_BROWSER" == "firefox" ]]; then wget https://github.com/mozilla/geckodriver/releases/download/v0.15.0/geckodriver-v0.15.0-linux64.tar.gz; fi
   - if [[ "$NEEDLE_BROWSER" == "firefox" ]]; then mkdir geckodriver; fi
   - if [[ "$NEEDLE_BROWSER" == "firefox" ]]; then tar -xzf geckodriver-v0.15.0-linux64.tar.gz -C geckodriver; fi

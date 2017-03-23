@@ -6,8 +6,8 @@ from warnings import warn
 from contextlib import contextmanager
 from errno import EEXIST
 import os
-import signal
 import sys
+import time
 
 if sys.version_info > (2, 7):
     from unittest import TestCase
@@ -20,9 +20,13 @@ if sys.version_info >= (3, 0):
 
 from PIL import Image
 
+from selenium.common.exceptions import WebDriverException
+
 from needle.engines.pil_engine import ImageDiff
 from needle.driver import (NeedleFirefox, NeedleChrome, NeedleIe, NeedleOpera,
                            NeedleSafari, NeedlePhantomJS, NeedleWebElement)
+
+DRIVER_ACQUISITION_TIMEOUT = 5  # seconds
 
 
 def _object_filename(obj):
@@ -103,7 +107,17 @@ class NeedleTestCase(TestCase):
             'phantomjs': NeedlePhantomJS,
         }
         browser_class = browser_map.get(browser_name, NeedleFirefox)
-        return browser_class()
+        # Allow a few retries to get the driver, in case it isn't quite ready yet
+        start_time = time.time()
+        while True:
+            try:
+                browser = browser_class()
+                break
+            except WebDriverException:
+                if time.time() - start_time >= DRIVER_ACQUISITION_TIMEOUT:
+                    raise
+                time.sleep(1)
+        return browser
 
     def __init__(self, *args, **kwargs):
         super(NeedleTestCase, self).__init__(*args, **kwargs)
