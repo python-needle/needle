@@ -47,4 +47,6 @@ The documentation will then be available browsable from
 Running Needle's test suite
 ---------------------------
 
-    $ nosetests
+First install tox (usually via ``pip install tox``).  Then:
+
+    $ tox
