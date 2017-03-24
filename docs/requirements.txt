@@ -1,0 +1,2 @@
+# Used by ReadTheDocs for documentation builds
+Sphinx==1.5.3
