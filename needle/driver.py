@@ -41,13 +41,8 @@ class NeedleWebElement(WebElement):
         Returns a dictionary containing, in pixels, the element's ``width`` and
         ``height``, and it's ``left`` and ``top`` position relative to the document.
         """
-        try:
-            # For selenium >= 2.50.1, W3C WebDriver spec drivers (like geckodriver)
-            location = size = self.rect
-        except (AttributeError, WebDriverException):
-            # For older selenium versions or older Selenium API drivers (like PhantomJS)
-            location = self.location
-            size = self.size
+        location = self.location
+        size = self.size
         return {
             "top": location['y'],
             "left": location['x'],
@@ -118,8 +113,8 @@ class NeedleWebDriverMixin(object):
     def _get_js_path(self):
         return os.path.join(os.path.dirname(os.path.abspath(__file__)), 'js')
 
-    def create_web_element(self, *args, **kwargs):
-        return NeedleWebElement(self, *args, **kwargs)
+    def create_web_element(self, element_id, *args, **kwargs):
+        return NeedleWebElement(self, element_id, w3c=self.w3c, *args, **kwargs)
 
 
 class NeedleRemote(NeedleWebDriverMixin, Remote):
