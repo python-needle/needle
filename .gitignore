@@ -6,10 +6,12 @@
 .*.swp
 .*.swn
 .*.swm
+/.tox/
 /build/
 /dist/
 selenium-server-standalone-*.jar
 /docs/_build
 tests/screenshots/*.png
+geckodriver.log
 ghostdriver.log
 __pycache__
