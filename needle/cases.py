@@ -24,7 +24,7 @@ from selenium.common.exceptions import WebDriverException
 
 from needle.engines.pil_engine import ImageDiff
 from needle.driver import (NeedleFirefox, NeedleChrome, NeedleIe, NeedleOpera,
-                           NeedleSafari, NeedlePhantomJS, NeedleWebElement)
+                           NeedleSafari, NeedlePhantomJS, NeedleWebElementMixin)
 
 DRIVER_ACQUISITION_TIMEOUT = 5  # seconds
 
@@ -113,7 +113,10 @@ class NeedleTestCase(TestCase):
             try:
                 browser = browser_class()
                 break
-            except WebDriverException:
+            except Exception as e:
+                if (not isinstance(e, WebDriverException)) and e.__class__.__name__ != 'WebDriverException':
+                    # nose likes to change selenium's WebDriverException to "nose.proxy.WebDriverException"
+                    raise
                 if time.time() - start_time >= DRIVER_ACQUISITION_TIMEOUT:
                     raise
                 time.sleep(1)
@@ -174,7 +177,7 @@ class NeedleTestCase(TestCase):
 
         :param element_or_selector:
             Either a CSS selector as a string or a
-            :py:class:`~needle.driver.NeedleWebElement` object that represents
+            :py:class:`~needle.driver.NeedleWebElementMixin` object that represents
             the element to capture.
         :param file:
             If a string, then assumed to be the filename for the screenshot,
@@ -186,7 +189,7 @@ class NeedleTestCase(TestCase):
 
         yield  # To allow using this method as a context manager
 
-        if not isinstance(element_or_selector, NeedleWebElement):
+        if not isinstance(element_or_selector, NeedleWebElementMixin):
             element = self.driver.find_element_by_css_selector(element_or_selector)
         else:
             element = element_or_selector
