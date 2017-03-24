@@ -155,7 +155,7 @@ class NeedleTestCase(TestCase):
 
         cls.driver.set_window_size(width + delta, height)
 
-    def assertScreenshot(self, element_or_selector, file, threshold=0):
+    def assertScreenshot(self, element_or_selector, file, ignore=[], threshold=0):
         """assert-style variant of compareScreenshot context manager
 
         compareScreenshot() can be considerably more efficient for recording baselines by avoiding the need
@@ -163,11 +163,11 @@ class NeedleTestCase(TestCase):
         to continue using normal unittest-style assertions if you don't need the efficiency benefits
         """
 
-        with self.compareScreenshot(element_or_selector, file, threshold=threshold):
+        with self.compareScreenshot(element_or_selector, file, ignore=ignore, threshold=threshold):
             pass
 
     @contextmanager
-    def compareScreenshot(self, element_or_selector, file, threshold=0):
+    def compareScreenshot(self, element_or_selector, file, ignore = [], threshold=0):
         """
         Assert that a screenshot of an element is the same as a screenshot on disk,
         within a given threshold.
@@ -180,11 +180,25 @@ class NeedleTestCase(TestCase):
             If a string, then assumed to be the filename for the screenshot,
             which will be appended with ``.png``. Otherwise assumed to be
             a file object for the baseline image.
+        :param ignore:
+            Either a CSS selector as a string or a
+            :py:class:`~needle.driver.NeedleWebElement` object that represents
+            the element to be ignored in the screenshot comparison (element will disappear from image).
         :param threshold:
             The threshold for triggering a test failure.
         """
 
         yield  # To allow using this method as a context manager
+
+        # Hiding element to be ignored in screenshot comparisons
+        if len(ignore) > 0:
+            for element_to_be_ignored in ignore:
+                if not isinstance(element_to_be_ignored, NeedleWebElement):
+                    element = self.driver.find_element_by_css_selector(element_to_be_ignored)
+                else:
+                    element = element_to_be_ignored
+                self.driver.execute_script('arguments[0].style.visibility="hidden";', element)
+
 
         if not isinstance(element_or_selector, NeedleWebElement):
             element = self.driver.find_element_by_css_selector(element_or_selector)
