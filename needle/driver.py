@@ -28,8 +28,14 @@ from selenium.webdriver.safari.webdriver import WebDriver as Safari
 from selenium.webdriver.phantomjs.webdriver import WebDriver as PhantomJS
 from selenium.webdriver.remote.webdriver import WebDriver as Remote
 
+try:
+    # Added in selenium 3.0.0.b3
+    from selenium.webdriver.firefox.webelement import FirefoxWebElement
+except ImportError:
+    from selenium.webdriver.remote.webelement import WebElement as FirefoxWebElement
 
-class NeedleWebElement(WebElement):
+
+class NeedleWebElementMixin(object):
     """
     An element on a page that Selenium has opened.
 
@@ -114,7 +120,10 @@ class NeedleWebDriverMixin(object):
         return os.path.join(os.path.dirname(os.path.abspath(__file__)), 'js')
 
     def create_web_element(self, element_id, *args, **kwargs):
-        return NeedleWebElement(self, element_id, w3c=self.w3c, *args, **kwargs)
+        if isinstance(self, NeedleFirefox):
+            return NeedleFirefoxWebElement(self, element_id, w3c=self.w3c, *args, **kwargs)
+        else:
+            return NeedleWebElement(self, element_id, w3c=self.w3c, *args, **kwargs)
 
 
 class NeedleRemote(NeedleWebDriverMixin, Remote):
@@ -156,5 +165,17 @@ class NeedleOpera(NeedleWebDriverMixin, Opera):
 class NeedleSafari(NeedleWebDriverMixin, Safari):
     """
     The same as Selenium's Safari WebDriver, but with NeedleWebDriverMixin's
+    functionality.
+    """
+
+class NeedleWebElement(NeedleWebElementMixin, WebElement):
+    """
+    The same as Selenium's WebElement, but with NeedleWebElementMixin's
+    functionality.
+    """
+
+class NeedleFirefoxWebElement(NeedleWebElementMixin, FirefoxWebElement):
+    """
+    The same as Selenium's FirefoxWebElement, but with NeedleWebElementMixin's
     functionality.
     """
