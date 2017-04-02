@@ -1,11 +1,12 @@
 Change log
 ==========
 
-Upcoming 0.5
-------------
+Upcoming 0.5.0
+--------------
 
 - Dropped Python 2.6 support.
 - Verified support for Python 3.2-3.6.
+- Firefox improvements: use FirefoxWebElement and geckodriver by default.
 
 0.4.1 (2017-01-04)
 ------------------
