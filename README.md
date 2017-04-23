@@ -1,7 +1,7 @@
 Needle
 ======
 
-[![Build Status](https://travis-ci.org/bfirsh/needle.png?branch=master)](https://travis-ci.org/bfirsh/needle)
+[![Build Status](https://travis-ci.org/python-needle/needle.png?branch=master)](https://travis-ci.org/python-needle/needle)
 
 Needle is a tool for testing visuals with [Selenium](http://seleniumhq.org/) 
 and [nose](https://nose.readthedocs.io/).

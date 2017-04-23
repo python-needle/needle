@@ -30,7 +30,7 @@ setup(
     description='Automated testing for your CSS.',
     author='Ben Firshman',
     author_email='ben@firshman.co.uk',
-    url='https://github.com/bfirsh/needle',
+    url='https://github.com/python-needle/needle',
     packages=find_packages(exclude=['scripts', 'tests']),
     package_data={'needle': ['js/*']},
     test_suite='nose.collector',
