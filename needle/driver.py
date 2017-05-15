@@ -60,7 +60,7 @@ class NeedleWebElementMixin(object):
         """
         Returns a screenshot of this element as a PIL image.
         """
-        # Get relevant coords in case of user scrolls to element
+        # Get relevant coords in case of user scroll to element
         scrolled_x = self._parent.execute_script("return window.pageXOffset;")
         scrolled_y = self._parent.execute_script("return window.pageYOffset;")
 
