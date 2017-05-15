@@ -57,6 +57,8 @@ class NeedleTestCase(TestCase):
 
     viewport_width = 1024
     viewport_height = 768
+    
+    resize_viewport = True
 
     output_directory = None
     baseline_directory = None
@@ -77,8 +79,10 @@ class NeedleTestCase(TestCase):
         cls.engine = klass()
 
         cls.driver = cls.get_web_driver()
-        cls.driver.set_window_position(0, 0)
-        cls.set_viewport_size(cls.viewport_width, cls.viewport_height)
+        if cls.resize_viewport:
+            cls.driver.set_window_position(0, 0)
+            cls.set_viewport_size(cls.viewport_width, cls.viewport_height)
+            
         super(NeedleTestCase, cls).setUpClass()
 
     @classmethod
