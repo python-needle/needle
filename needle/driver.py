@@ -60,6 +60,10 @@ class NeedleWebElementMixin(object):
         """
         Returns a screenshot of this element as a PIL image.
         """
+        # Get relevant coords in case of user scroll to element
+        scrolled_x = self._parent.execute_script("return window.pageXOffset;")
+        scrolled_y = self._parent.execute_script("return window.pageYOffset;")
+
         d = self.get_dimensions()
         
         # Cast values to int in order for _ImageCrop not to break
@@ -80,10 +84,10 @@ class NeedleWebElementMixin(object):
             image = self._parent.get_screenshot_as_image()
 
         return image.crop((
-            d['left'],
-            d['top'],
-            d['left'] + d['width'],
-            d['top'] + d['height'],
+            d['left'] - scrolled_x,
+            d['top'] - scrolled_y,
+            d['left'] + d['width'] - scrolled_x,
+            d['top'] + d['height'] - scrolled_y,
         ))
 
 
