@@ -21,7 +21,7 @@ class Engine(EngineBase):
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
         compare_stdout, compare_stderr = process.communicate()
-        print(compare_stderr)
+
         difference = float(compare_stderr.split()[1][1:-1])
         if difference <= threshold:
             os.remove(diff_file)
