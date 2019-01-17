@@ -17,6 +17,7 @@ install_requires = [
     'nose>=1.0.0',
     'selenium>=2,<4',
     'pillow',
+    'wand>=0.5.0'
 ]
 
 if sys.version_info < (2, 7, 0):
