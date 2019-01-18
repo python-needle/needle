@@ -21,7 +21,7 @@ class Engine(EngineBase):
         if difference <= threshold:
             return
         else:
-            comparison.save(diff_file)
+            comparison.save(filename=diff_file)
 
         raise AssertionError("The new screenshot '{new}' did not match "
                              "the baseline '{baseline}' (See {diff}):\n"
