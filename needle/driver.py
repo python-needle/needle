@@ -61,12 +61,13 @@ class NeedleWebElementMixin(object):
         Returns a screenshot of this element as a PIL image.
         """
         d = self.get_dimensions()
+        devicePixelRatio = int(self._parent.execute_script("return window.devicePixelRatio"))
         
         # Cast values to int in order for _ImageCrop not to break
         d['left'] = int(d['left'])
         d['top'] = int(d['top'])
-        d['width'] = int(d['width'])
-        d['height'] = int(d['height'])
+        d['width'] = int(d['width']) * devicePixelRatio
+        d['height'] = int(d['height']) * devicePixelRatio
 
         try:
             # For selenium >= 2.46.1, W3C WebDriver spec drivers (like geckodriver)
