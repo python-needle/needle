@@ -142,8 +142,10 @@ generate a diff PNG file when a test fails, highlighting the differences
 between the baseline image and the new screenshot.
 
 Note that to use the PerceptualDiff engine you will first need to
-`download <http://pdiff.sourceforge.net/>`_ the ``perceptualdiff`` binary and
-place it in your ``PATH``.
+`download <https://github.com/myint/perceptualdiff/releases>`_,
+`build and install <https://github.com/myint/perceptualdiff#build-instructions>`_
+PerceptualDiff or otherwise ensure that the ``perceptualdiff`` binary is in
+your ``PATH``.
 
 To use the ImageMagick engine you will need to install a package on your
 machine (e.g. ``sudo apt-get install imagemagick`` on Ubuntu or
