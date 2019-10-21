@@ -16,30 +16,26 @@ class Engine(EngineBase):
         width, height = Image.open(output_file).size
         threshold = int(width * height * threshold)
 
-        diff_ppm = output_file.replace(".png", ".diff.ppm")
-        cmd = "%s -threshold %d -output %s %s %s" % (
-            self.perceptualdiff_path, threshold, diff_ppm, baseline_file, output_file)
-        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if self.perceptualdiff_output_png:
+            diff_file = output_file.replace(".png", ".diff.png")
+        else:
+            diff_file = output_file.replace(".png", ".diff.ppm")
+        cmd = [self.perceptualdiff_path, '-threshold', str(threshold), '-output', diff_file, baseline_file, output_file]
+        process = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         perceptualdiff_stdout, _ = process.communicate()
 
         # Sometimes perceptualdiff returns a false positive with this exact message:
         # 'FAIL: Images are visibly different\n0 pixels are different\n\n'
         # We catch that here.
         if process.returncode == 0 or b'\n0 pixels are different' in perceptualdiff_stdout:
-            # No differences found, but make sure to clean up the .ppm in case it was created.
-            if os.path.exists(diff_ppm):
-                os.remove(diff_ppm)
+            # No differences found, but make sure to clean up the diff file in
+            # case it was created.
+            if os.path.exists(diff_file):
+                os.remove(diff_file)
             return
         else:
-            if os.path.exists(diff_ppm):
-                if self.perceptualdiff_output_png:
-                    # Convert the .ppm output to .png
-                    diff_png = diff_ppm.replace("diff.ppm", "diff.png")
-                    Image.open(diff_ppm).save(diff_png)
-                    os.remove(diff_ppm)
-                    diff_file_msg = ' (See %s)' % diff_png
-                else:
-                    diff_file_msg = ' (See %s)' % diff_ppm
+            if os.path.exists(diff_file):
+                diff_file_msg = ' (See %s)' % diff_file
             else:
                 diff_file_msg = ''
             raise AssertionError("The new screenshot '%s' did not match "
