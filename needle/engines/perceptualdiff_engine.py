@@ -20,9 +20,8 @@ class Engine(EngineBase):
             diff_file = output_file.replace(".png", ".diff.png")
         else:
             diff_file = output_file.replace(".png", ".diff.ppm")
-        cmd = "%s -threshold %d -output %s %s %s" % (
-            self.perceptualdiff_path, threshold, diff_file, baseline_file, output_file)
-        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cmd = [self.perceptualdiff_path, '-threshold', str(threshold), '-output', diff_file, baseline_file, output_file]
+        process = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         perceptualdiff_stdout, _ = process.communicate()
 
         # Sometimes perceptualdiff returns a false positive with this exact message:
