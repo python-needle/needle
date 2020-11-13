@@ -15,9 +15,6 @@ else:
     except ImportError:
         from StringIO import StringIO as IOClass
 
-
-# from PIL import Image
-
 import math
 from PIL import Image, ImageDraw, ImageColor
 from selenium.common.exceptions import WebDriverException
