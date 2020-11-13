@@ -17,7 +17,6 @@ else:
 if sys.version_info >= (3, 0):
     basestring = str
 
-
 from PIL import Image
 
 from selenium.common.exceptions import WebDriverException
@@ -158,19 +157,20 @@ class NeedleTestCase(TestCase):
 
         cls.driver.set_window_size(width + delta, height)
 
-    def assertScreenshot(self, element_or_selector, file, threshold=0):
+    def assertScreenshot(self, element_or_selector, file, threshold=0, exclude=None):
         """assert-style variant of compareScreenshot context manager
 
         compareScreenshot() can be considerably more efficient for recording baselines by avoiding the need
         to load pages before checking whether we're actually going to save them. This function allows you
         to continue using normal unittest-style assertions if you don't need the efficiency benefits
+        :param exclude: Selector of  the element to be excluded for image comparison (A mask is applied to the element)
         """
 
-        with self.compareScreenshot(element_or_selector, file, threshold=threshold):
+        with self.compareScreenshot(element_or_selector, file, threshold=threshold, exclude=exclude):
             pass
 
     @contextmanager
-    def compareScreenshot(self, element_or_selector, file, threshold=0):
+    def compareScreenshot(self, element_or_selector, file, threshold=0, exclude=None):
         """
         Assert that a screenshot of an element is the same as a screenshot on disk,
         within a given threshold.
@@ -185,10 +185,12 @@ class NeedleTestCase(TestCase):
             a file object for the baseline image.
         :param threshold:
             The threshold for triggering a test failure.
+        :param exclude:
+            Selector of  the element to be excluded for image comparison (A mask is applied to the element)
         """
 
         yield  # To allow using this method as a context manager
-
+        NeedleWebElementMixin.driver = self.driver
         if not isinstance(element_or_selector, NeedleWebElementMixin):
             element = self.driver.find_element_by_css_selector(element_or_selector)
         else:
@@ -197,7 +199,7 @@ class NeedleTestCase(TestCase):
         if not isinstance(file, basestring):
             # Comparing in-memory files instead of on-disk files
             baseline_image = Image.open(file).convert('RGB')
-            fresh_screenshot = element.get_screenshot()
+            fresh_screenshot = element.get_screenshot(exclude)
             diff = ImageDiff(fresh_screenshot, baseline_image)
             distance = abs(diff.get_distance())
             if distance > threshold:
@@ -226,7 +228,7 @@ class NeedleTestCase(TestCase):
 
             if save_baseline:
                 # Save the baseline screenshot and bail out
-                element.get_screenshot().save(baseline_file)
+                element.get_screenshot(exclude).save(baseline_file)
                 return
             else:
                 if not os.path.exists(baseline_file):
@@ -235,7 +237,7 @@ class NeedleTestCase(TestCase):
                                   % baseline_file)
 
                 # Save the new screenshot
-                element.get_screenshot().save(output_file)
+                element.get_screenshot(exclude).save(output_file)
 
                 try:
                     self.engine.assertSameFiles(output_file, baseline_file, threshold)
