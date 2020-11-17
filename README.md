@@ -69,4 +69,4 @@ class BBCNewsTest(NeedleTestCase):
         self.assertScreenshot('#blq-mast', 'bbc-masthead', exclude=(By.ID, 'page-title'))
 ```
 
-Refer to assertScreenshot and compareScreenshot methods in [cases.py](./needle/cases.py) for more details.
+Refer to `assertScreenshot` and `compareScreenshot` methods in [cases.py](./needle/cases.py) for more details.
