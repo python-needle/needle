@@ -32,6 +32,9 @@ Documentation
 
 Full documentation available on [Read the Docs](https://needle.readthedocs.io/).
 
+This forked repo has some added features such as masking an element to be ignored for image comparison. 
+Refer to the [Additional Features](#additional-features) section below.
+
 If you'd like to build the documentation yourself, first install ``sphinx``:
 
     pip install sphinx
@@ -50,3 +53,20 @@ Running Needle's test suite
 First install tox (usually via ``pip install tox``).  Then:
 
     $ tox
+
+Additional Features
+-------------------
+
+Exclude element for image comparison.
+
+```python (example)
+from needle.cases import NeedleTestCase
+from selenium.webdriver.common.by import By
+
+class BBCNewsTest(NeedleTestCase):
+    def test_masthead(self):
+        self.driver.get('http://www.bbc.co.uk/news/')
+        self.assertScreenshot('#blq-mast', 'bbc-masthead', exclude=(By.ID, 'page-title'))
+```
+
+Refer to `assertScreenshot` and `compareScreenshot` methods in [cases.py](./needle/cases.py) for more details.
