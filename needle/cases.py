@@ -163,7 +163,8 @@ class NeedleTestCase(TestCase):
         compareScreenshot() can be considerably more efficient for recording baselines by avoiding the need
         to load pages before checking whether we're actually going to save them. This function allows you
         to continue using normal unittest-style assertions if you don't need the efficiency benefits
-        :param exclude: Selector of  the element to be excluded for image comparison (A mask is applied to the element)
+        :param exclude: list of Selectors of the elements to be excluded for image comparison
+            (A mask is applied to the elements)
         """
 
         with self.compareScreenshot(element_or_selector, file, threshold=threshold, exclude=exclude):
@@ -185,8 +186,8 @@ class NeedleTestCase(TestCase):
             a file object for the baseline image.
         :param threshold:
             The threshold for triggering a test failure.
-        :param exclude:
-            Selector of  the element to be excluded for image comparison (A mask is applied to the element)
+        :param exclude: list of Selectors of the elements to be excluded for image comparison.
+            (A mask is applied to the elements)
         """
 
         yield  # To allow using this method as a context manager

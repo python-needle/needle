@@ -55,14 +55,23 @@ class NeedleWebElementMixin(object):
             "height": size['height']
         }
 
+    @staticmethod
+    def _get_ratio(image_size, window_size):
+
+        return max((
+            math.ceil(image_size[0] / float(window_size[0])),
+            math.ceil(image_size[1] / float(window_size[1]))
+        ))
+
     def get_screenshot(self, exclude=None):
         """
         Returns a screenshot of this element as a PIL image.
-        :param exclude: Selector of the element to be excluded for image comparison (A mask is applied to the element)
+        :param exclude: list of Selectors of the elements to be excluded for image comparison
+        (A mask is applied to the elements)
         """
 
         self.driver.execute_script("window.scrollTo(0, 0)")
-        dimensions1 = self.get_dimensions()
+        include_dimensions = self.get_dimensions()
         try:
             stream = IOClass(base64.b64decode(self.driver.get_screenshot_as_base64().encode('ascii')))
             image = Image.open(stream).convert('RGB')
@@ -73,25 +82,21 @@ class NeedleWebElementMixin(object):
         window_size = int(self.driver.execute_script("return screen.width;")), int(
             self.driver.execute_script("return screen.height;"))
         image_size = image.size
-        ratio = max((math.ceil(image_size[0] / float(window_size[0])),
-                     math.ceil(image_size[1] / float(window_size[1]))))
-        if exclude is not None:
-            element = self.driver.find_element(*exclude)
-            if isinstance(element, WebElement):
-
-                image_size = image.size
-
+        ratio = self._get_ratio(image_size, window_size)
+        if isinstance(exclude, (list, tuple)) and exclude:
+            elements = [self.driver.find_element(*element) for element in exclude]
+            for element in elements:
                 dimensions = element.get_dimensions()
-
-                if not image_size == (dimensions['width'], dimensions['height']):
-                    canvas = ImageDraw.Draw(image)
-                    canvas.rectangle([point * ratio for point in (dimensions['left'], dimensions['top'],
-                                                                  (dimensions['left'] + dimensions['width']),
-                                                                  (dimensions['top'] + dimensions['height']))],
+                canvas = ImageDraw.Draw(image)
+                canvas.rectangle([point * ratio for point in (dimensions['left'], dimensions['top'],
+                                                              (dimensions['left'] + dimensions['width']),
+                                                              (dimensions['top'] + dimensions['height']))],
                                      fill=ImageColor.getrgb('black'))
-        return image.crop([point * ratio for point in (dimensions1['left'], dimensions1['top'],
-                                                       (dimensions1['left'] + dimensions1['width']),
-                                                       (dimensions1['top'] + dimensions1['height']))])
+        if not image_size == (include_dimensions['width'], include_dimensions['height']):
+            return image.crop([point * ratio for point in (include_dimensions['left'], include_dimensions['top'],
+                                                           (include_dimensions['left'] + include_dimensions['width']),
+                                                           (include_dimensions['top'] + include_dimensions['height']))])
+        return image
 
 
 class NeedleWebDriverMixin(object):
