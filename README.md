@@ -57,7 +57,7 @@ First install tox (usually via ``pip install tox``).  Then:
 Additional Features
 -------------------
 
-Exclude element for image comparison.
+Exclude elements for image comparison.
 
 ```python (example)
 from needle.cases import NeedleTestCase
@@ -66,7 +66,7 @@ from selenium.webdriver.common.by import By
 class BBCNewsTest(NeedleTestCase):
     def test_masthead(self):
         self.driver.get('http://www.bbc.co.uk/news/')
-        self.assertScreenshot('#blq-mast', 'bbc-masthead', exclude=(By.ID, 'page-title'))
+        self.assertScreenshot('#blq-mast', 'bbc-masthead', exclude=[(By.ID, 'page-title')])
 ```
 
 Refer to `assertScreenshot` and `compareScreenshot` methods in [cases.py](./needle/cases.py) for more details.
