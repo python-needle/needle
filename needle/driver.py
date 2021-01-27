@@ -1,6 +1,6 @@
 # encoding: utf-8
 from __future__ import absolute_import
-
+import logging
 import base64
 import os
 import sys
@@ -73,8 +73,14 @@ class NeedleWebElementMixin(object):
         self.driver.execute_script("window.scrollTo(0, 0)")
         include_dimensions = self.get_dimensions()
         try:
-            stream = IOClass(base64.b64decode(self.driver.get_screenshot_as_base64().encode('ascii')))
-            image = Image.open(stream).convert('RGB')
+            if exclude is not None:
+                stream = IOClass(base64.b64decode(self.driver.get_screenshot_as_base64().encode('ascii')))
+                image = Image.open(stream).convert('RGB')
+                image.save("before_crop_exclude.png")
+            else:
+                fh = IOClass(self.screenshot_as_png)
+                image = Image.open(fh).convert('RGB')
+                image.save("before_crop.png")
         except (AttributeError, WebDriverException):
             # Fall back to cropping a full page screenshot
             image = self._parent.get_screenshot_as_image()
@@ -92,8 +98,15 @@ class NeedleWebElementMixin(object):
                                                               (dimensions['left'] + dimensions['width']),
                                                               (dimensions['top'] + dimensions['height']))],
                                      fill=ImageColor.getrgb('black'))
+        if  include_dimensions['height'] > image_size[1] or include_dimensions['width'] > image_size[0]:
+            logging.info(f"The element dimensions ({include_dimensions['width']}, {include_dimensions['height']}) "
+                  f"are larger than the image size ({image_size[0]}, {image_size[1]}). Resetting the element size to "
+                  f"match with the image size.")
+            include_dimensions['height'] = image_size[1] if include_dimensions['height'] > image_size[1] else include_dimensions['height']
+            include_dimensions['width'] = image_size[0] if include_dimensions['width'] > image_size[0] else include_dimensions['width']
+
         if not image_size == (include_dimensions['width'], include_dimensions['height']):
-            return image.crop([point * ratio for point in (include_dimensions['left'], include_dimensions['top'],
+            image = image.crop([point * ratio for point in (include_dimensions['left'], include_dimensions['top'],
                                                            (include_dimensions['left'] + include_dimensions['width']),
                                                            (include_dimensions['top'] + include_dimensions['height']))])
         return image
