@@ -69,11 +69,10 @@ class NeedleWebElementMixin(object):
         :param exclude: list of Selectors of the elements to be excluded for image comparison
         (A mask is applied to the elements)
         """
-
-        self.driver.execute_script("window.scrollTo(0, 0)")
         include_dimensions = self.get_dimensions()
         try:
             if exclude is not None:
+                self.driver.execute_script("window.scrollTo(0, 0)")
                 stream = IOClass(base64.b64decode(self.driver.get_screenshot_as_base64().encode('ascii')))
                 image = Image.open(stream).convert('RGB')
             else:
