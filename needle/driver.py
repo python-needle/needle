@@ -35,6 +35,8 @@ except ImportError:
 
 
 class NeedleWebElementMixin(object):
+    ANDROID_STATUS_BAR_HEIGHT = 58
+    IOS_STATUS_BAR_HEIGHT = 93
     """
     An element on a page that Selenium has opened.
 
@@ -71,7 +73,7 @@ class NeedleWebElementMixin(object):
         """
         include_dimensions = self.get_dimensions()
         try:
-            if exclude is not None:
+            if exclude is not None or self.driver.capabilities.get('deviceName') is not None:
                 self.driver.execute_script("window.scrollTo(0, 0)")
                 stream = IOClass(base64.b64decode(self.driver.get_screenshot_as_base64().encode('ascii')))
                 image = Image.open(stream).convert('RGB')
@@ -82,8 +84,28 @@ class NeedleWebElementMixin(object):
             # Fall back to cropping a full page screenshot
             image = self._parent.get_screenshot_as_image()
 
-        window_size = int(self.driver.execute_script("return screen.width;")), int(
-            self.driver.execute_script("return screen.height;"))
+        # screen height includes the status bar and navigation bar in mobile devices
+        screen_height = int(self.driver.execute_script("return screen.height;"))
+        # screen width includes horizontal scroll bar in mobile devices
+        screen_width = int(self.driver.execute_script("return screen.width;"))
+        window_size = screen_width, screen_height
+        if self.driver.capabilities.get('deviceName') is not None:
+            inner_height = int(self.driver.execute_script(
+                "return Math.max(document.documentElement.clientHeight, window.innerHeight || 0);"))
+            if self.driver.capabilities.get('platformName') == 'Android':
+                """ Screenshot on Android Chrome doesn't contain the status bar, however it looks like the viewport height 
+                changes when the status bar is hidden. Adding status bar height to the screen inner height equal the new
+                viewport height"""
+                window_size = screen_width, inner_height + self.ANDROID_STATUS_BAR_HEIGHT
+
+            image = image.resize(window_size, Image.ANTIALIAS)
+
+            """ Screenshot on iOS Safari includes its status bar (top) and navigation bar (bottom). It causes the 
+            Y coordinate to be incorrect since element position relative to the viewport. The workaround for now is to 
+            crop off the status bar"""
+            if self.driver.capabilities.get('platformName') == 'iOS':
+                include_dimensions = self.get_dimensions()
+                image = image.crop((0, self.IOS_STATUS_BAR_HEIGHT, screen_width, screen_height))
         image_size = image.size
         ratio = self._get_ratio(image_size, window_size)
         if isinstance(exclude, (list, tuple)) and exclude:
