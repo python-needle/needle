@@ -227,9 +227,9 @@ class NeedleTestCase(TestCase):
                 else:
                     save_baseline = True
             if self.driver.capabilities.get('deviceName') is None:
-                body_element = self.driver.find_element_by_tag_name('body')
-                size = body_element.size
-                self.driver.set_window_size(size['width'], size['height'])
+                required_width = self.driver.execute_script('return document.body.parentNode.scrollWidth')
+                required_height = self.driver.execute_script('return document.body.parentNode.scrollHeight')
+                self.driver.set_window_size(required_width, required_height)
             if save_baseline:
                 # Save the baseline screenshot and bail out
                 element.get_screenshot(exclude).save(baseline_file)
