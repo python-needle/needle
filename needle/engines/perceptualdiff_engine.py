@@ -21,27 +21,32 @@ class Engine(EngineBase):
             self.perceptualdiff_path, threshold, diff_ppm, baseline_file, output_file)
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         perceptualdiff_stdout, _ = process.communicate()
-
+        if b'perceptualdiff: command not found' in _:
+            raise Exception("Image comparison is not working. Please check if the perceptual diff engine has "
+                            "been setup correctly")
+        elif b'Image dimensions do not match' in perceptualdiff_stdout:
+            raise Exception("Baseline and runtime dimensions are different. Unable to process diff")
+        else:
         # Sometimes perceptualdiff returns a false positive with this exact message:
         # 'FAIL: Images are visibly different\n0 pixels are different\n\n'
         # We catch that here.
-        if process.returncode == 0 or b'\n0 pixels are different' in perceptualdiff_stdout:
-            # No differences found, but make sure to clean up the .ppm in case it was created.
-            if os.path.exists(diff_ppm):
-                os.remove(diff_ppm)
-            return
-        else:
-            if os.path.exists(diff_ppm):
-                if self.perceptualdiff_output_png:
-                    # Convert the .ppm output to .png
-                    diff_png = diff_ppm.replace("diff.ppm", "diff.png")
-                    Image.open(diff_ppm).save(diff_png)
+            if process.returncode == 0 or b'\n0 pixels are different' in perceptualdiff_stdout:
+                # No differences found, but make sure to clean up the .ppm in case it was created.
+                if os.path.exists(diff_ppm):
                     os.remove(diff_ppm)
-                    diff_file_msg = ' (See %s)' % diff_png
-                else:
-                    diff_file_msg = ' (See %s)' % diff_ppm
+                return
             else:
-                diff_file_msg = ''
-            raise AssertionError("The new screenshot '%s' did not match "
-                                 "the baseline '%s'%s:\n%s"
-                                 % (output_file, baseline_file, diff_file_msg, perceptualdiff_stdout))
+                if os.path.exists(diff_ppm):
+                    if self.perceptualdiff_output_png:
+                        # Convert the .ppm output to .png
+                        diff_png = diff_ppm.replace("diff.ppm", "diff.png")
+                        Image.open(diff_ppm).save(diff_png)
+                        os.remove(diff_ppm)
+                        diff_file_msg = ' (See %s)' % diff_png
+                    else:
+                        diff_file_msg = ' (See %s)' % diff_ppm
+                else:
+                    diff_file_msg = ''
+                raise AssertionError("The new screenshot '%s' did not match "
+                                     "the baseline '%s'%s:\n%s"
+                                     % (output_file, baseline_file, diff_file_msg, perceptualdiff_stdout))
