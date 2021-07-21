@@ -250,4 +250,3 @@ class NeedleTestCase(TestCase):
                 else:
                     if self.cleanup_on_success:
                         os.remove(output_file)
-                    #commit test
