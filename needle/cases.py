@@ -23,7 +23,7 @@ from selenium.common.exceptions import WebDriverException
 
 from needle.engines.pil_engine import ImageDiff
 from needle.driver import (NeedleFirefox, NeedleChrome, NeedleIe, NeedleOpera,
-                           NeedleSafari, NeedlePhantomJS, NeedleWebElementMixin)
+                           NeedleSafari, NeedleWebElementMixin)
 
 DRIVER_ACQUISITION_TIMEOUT = 5  # seconds
 

@@ -24,7 +24,6 @@ from selenium.webdriver.chrome.webdriver import WebDriver as Chrome
 from selenium.webdriver.ie.webdriver import WebDriver as Ie
 from selenium.webdriver.opera.webdriver import WebDriver as Opera
 from selenium.webdriver.safari.webdriver import WebDriver as Safari
-from selenium.webdriver.phantomjs.webdriver import WebDriver as PhantomJS
 from selenium.webdriver.remote.webdriver import WebDriver as Remote
 
 try:
@@ -165,20 +164,14 @@ class NeedleWebDriverMixin(object):
 
     def create_web_element(self, element_id, *args, **kwargs):
         if isinstance(self, NeedleFirefox):
-            return NeedleFirefoxWebElement(self, element_id, w3c=self.w3c, *args, **kwargs)
+            return NeedleFirefoxWebElement(self, element_id, *args, **kwargs)
         else:
-            return NeedleWebElement(self, element_id, w3c=self.w3c, *args, **kwargs)
+            return NeedleWebElement(self, element_id, *args, **kwargs)
 
 
 class NeedleRemote(NeedleWebDriverMixin, Remote):
     """
     The same as Selenium's remote WebDriver, but with NeedleWebDriverMixin's
-    functionality.
-    """
-
-class NeedlePhantomJS(NeedleWebDriverMixin, PhantomJS):
-    """
-    The same as Selenium's PhantomJS WebDriver, but with NeedleWebDriverMixin's
     functionality.
     """
 
