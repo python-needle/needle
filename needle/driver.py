@@ -106,6 +106,8 @@ class NeedleWebElementMixin(object):
                 include_dimensions = self.get_dimensions()
                 image = image.crop((0, self.IOS_STATUS_BAR_HEIGHT, screen_width, screen_height))
         image_size = image.size
+        if image_size[0] * image_size[1]  >= window_size[0] * window_size[0]:
+            window_size = image_size
         ratio = self._get_ratio(image_size, window_size)
         if isinstance(exclude, (list, tuple)) and exclude:
             elements = [self.driver.find_element(*element) for element in exclude]
